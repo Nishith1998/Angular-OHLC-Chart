@@ -1,0 +1,11 @@
+<p>chart works!</p>
+<button (click)="updateSeries()">update</button>
+<button (click)="changeChartType()">chart type change</button>
+<div *ngIf="chartData">
+    <apx-chart 
+        [series]="chartOptions.series" 
+        [chart]="chartOptions.chart" 
+        [xaxis]="chartOptions.xaxis"
+        [title]="chartOptions.title"
+    ></apx-chart>
+</div>
