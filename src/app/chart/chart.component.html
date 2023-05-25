@@ -1,11 +1,12 @@
-<p>chart works!</p>
-<button (click)="updateSeries()">update</button>
-<button (click)="changeChartType()">chart type change</button>
-<div *ngIf="chartData">
+<!-- <button (click)="updateSeries('adf')">update series</button> -->
+<div *ngIf="chartOptions && chartData">
     <apx-chart 
         [series]="chartOptions.series" 
         [chart]="chartOptions.chart" 
         [xaxis]="chartOptions.xaxis"
         [title]="chartOptions.title"
-    ></apx-chart>
+        [plotOptions]="chartOptions.plotOptions"
+        [tooltip]="chartOptions.tooltip"
+        ></apx-chart>
+        <!-- [colors]="chartOptions.colors" -->
 </div>
