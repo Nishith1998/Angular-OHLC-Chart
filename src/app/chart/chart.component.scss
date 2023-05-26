@@ -1,0 +1,25 @@
+.container {
+    display: flex;
+    flex-direction: row;
+}
+
+::ng-deep {
+    .data-table {
+        margin-top: 10px;
+        max-height: 300px;
+        overflow: auto;
+    }
+    .my-tooltip {
+        display: none !important;
+      }
+      
+}
+.ohlc-info {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}
+
+  #apx-chart .apexcharts-tooltip .apexcharts-tooltip-series-group.active {
+    background: teal !important;
+  }

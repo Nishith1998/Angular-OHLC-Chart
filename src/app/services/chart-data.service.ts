@@ -34,8 +34,14 @@ export class ChartDataService {
   constructor(private http: HttpClient, public ws: WebsocketService) { }
 
   getCandles(msg: any) {
-    // return this.http.get('api/getCandles');
-    this.ws.sendMessage.next(msg);
-    return this.ws.receiveMessage.pipe(map(data => JSON.parse(data)), skipWhile((data) => { return data.event != undefined }), map(data => candleMapping(data[1])));
+    console.log("payload: getCandles ", msg)
+    return this.http.post('api/getCandles', msg);
+    // debugger
+    // this.ws.sendMessage.next(msg);
+    // return this.ws.receiveMessage.pipe(map(data => JSON.parse(data)), skipWhile((data) => { return data.event != undefined }), map(data => candleMapping(data[1])));
+  }
+
+  getAllSymbols() {
+    return this.http.get('api/getAllSymbols')
   }
 }
