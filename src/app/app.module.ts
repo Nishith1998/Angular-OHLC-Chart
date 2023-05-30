@@ -15,13 +15,15 @@ import { CommonModule } from '@angular/common';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { SymbolTableComponent } from './symbol-table/symbol-table.component';
+import { OrderBookComponent } from './order-book/order-book.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     ChartComponent,
-    SymbolTableComponent
+    SymbolTableComponent,
+    OrderBookComponent
   ],
   imports: [
     CommonModule,

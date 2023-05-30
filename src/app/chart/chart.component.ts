@@ -4,7 +4,7 @@ import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexTitleSubtitle, ApexPlotO
 import { Observable, first, map, pipe } from 'rxjs';
 import { WebsocketService } from '../services/websocket.service';
 import { INITIAL_TIME_FRAME_FOR_CHART, timeSpansList } from '../constants';
-import { chartDataType, labelValuePair } from '../models';
+import { chartDataType, chartPayload, labelValuePair } from '../models';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -23,7 +23,7 @@ export class ChartComponent implements OnInit {
 
   chartData: chartDataType;
   chartOptions: ChartOptions;
-  candlePayload: { symbol: string, timeFrame: string };
+  candlePayload: chartPayload;
   ohlcOnHover: { o: number; h: number; l: number; c: number; };
   timeSpansList: labelValuePair[] = timeSpansList;
   selectedTimeFrame: labelValuePair;

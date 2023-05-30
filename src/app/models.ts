@@ -23,3 +23,8 @@ export type chartDataType = {
     x: number;
     y: number[];
   }[];
+
+export type chartPayload = {
+    symbol: string;
+    timeFrame: string;
+  };
