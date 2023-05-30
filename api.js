@@ -22,7 +22,7 @@ server.post('/api/getCandles', (req, res) => {
     console.log("this is req", req.body)
     let param = req.body;
 
-    axios.get('https://api-pub.bitfinex.com/v2/candles/trade%3A1m%3A'+ param.symbol + '/hist')
+    axios.get('https://api-pub.bitfinex.com/v2/candles/trade%3A' + param.timeFrame + '%3A'+ param.symbol + '/hist')
         .then(function (response) {
             // handle success
             // console.log(response.data);

@@ -1,14 +1,17 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ChartDataService } from '../services/chart-data.service';
-import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexTitleSubtitle } from 'ng-apexcharts';
+import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexTitleSubtitle, ApexPlotOptions, ApexTooltip } from 'ng-apexcharts';
 import { Observable, first, map, pipe } from 'rxjs';
 import { WebsocketService } from '../services/websocket.service';
+import { INITIAL_TIME_FRAME_FOR_CHART, timeSpansList } from '../constants';
+import { chartDataType, labelValuePair } from '../models';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
   xaxis: ApexXAxis;
-  title: ApexTitleSubtitle;
+  plotOptions: ApexPlotOptions;
+  tooltip: ApexTooltip;
 };
 
 @Component({
@@ -18,99 +21,42 @@ export type ChartOptions = {
 })
 export class ChartComponent implements OnInit {
 
-  @ViewChild("chart") chart: any;
-  chartData: any;
-  chartOptions: Partial<ChartOptions> | any;
-  getAllSymbols$: Observable<any>;
-  displayedColumns: any[] = ['name', 'last'];
-  candlePayload: any = {
-    symbol: ''
-  };
-  ohlcOnHover: { o: number; h: number; l: number; c: number; } | undefined;
-  selectedSymbol!: string;
+  chartData: chartDataType;
+  chartOptions: ChartOptions;
+  candlePayload: { symbol: string, timeFrame: string };
+  ohlcOnHover: { o: number; h: number; l: number; c: number; };
+  timeSpansList: labelValuePair[] = timeSpansList;
+  selectedTimeFrame: labelValuePair;
+  selectedTimeSpan: { label: string, value: string } | null;
 
-  constructor(private cdr: ChangeDetectorRef, public chartDataService: ChartDataService, private wsService: WebsocketService) {
-    console.log("this is chart component")
-    this.getAllSymbols$ = this.chartDataService.getAllSymbols();
-    
-    // let msg = { 
-    //   symbol: 'tBTCUSD'
-    //   // event: 'subscribe', 
-    //   // channel: 'candles', 
-    //   // key: 'trade:1h:tBTCUSD' //'trade:TIMEFRAME:SYMBOL'
-    // };
+  constructor(private cdr: ChangeDetectorRef, public chartDataService: ChartDataService) {
 
   }
 
   ngOnInit() {
-    this.getAllSymbols$.subscribe(data => {
-      if(data) {
-        this.selectedSymbol = data[0][0];
-        this.candlePayload = {
-          symbol: data[0][0],
-          timeFrame: '1m'
-        }
-        this.callCandleAPI();
-      }
-    });
-
-  }
-  public updateSeries(data: any) {
-    // debugger;
-  //   this.chart.updateSeries([...this.chartOptions.series[0].data, {
-  //     "x": "2023-05-25T08:52:00.000Z",
-  //     "y": [6629.81, 6650.5, 6623.04, 6633.33]
-  // }])
-    this.chartOptions.series[0].data = [...this.chartOptions.series[0].data, data];
-  let myData = this.chartOptions.series;
-  this.chartOptions.series = [...myData];
-    // this.chart.appendSeries(data);
-    // this.chartOptions.series = [{
-    //   data: [23, 44, 1, 22]
-    // }];
+    this.candlePayload = {
+      symbol: '',
+      timeFrame: INITIAL_TIME_FRAME_FOR_CHART
+    }
   }
 
-  // getTicker(value: any) {
-  //   console.log("value: ", value);
-  //   let msg = { 
-  //     symbol: value[0],
-  //     // event: 'subscribe', 
-  //     // channel: 'candles', 
-  //     // key: 'trade:1h:tBTCUSD' //'trade:TIMEFRAME:SYMBOL'
-  //   };
-  //   this.chartDataService.getCandles(msg).pipe(first()).subscribe((data:any) => {
-  //     console.log("data: ", data)
-  //     this.updateChartOptions(data);
-  //   });
-  //   // this.chartDataService.getCandles(msg);
-  // }
 
-  callCandleAPI() {
-    this.chartDataService.getCandles(this.candlePayload).pipe(first()).subscribe((data:any) => {
-      console.log("data: ", data)
-      this.updateChartOptions(data);
-    });
-  }
-
-  updateChartOptions(data: any) {
+  updateChartOptions(data: chartDataType) {
     this.chartData = data;
     this.chartOptions = {
       series: [
-        //   {
-        //   name: 'line',
-        //   type: 'dashed',
-        //   data: [2620]
-        // },
         {
           name: "My-series",
-          data: this.chartData
-          // [            {
-          //   x: new Date(1538778600000),
-          //   y: [6629.81, 6650.5, 6623.04, 6633.33]
-          // },]
+          data: this.chartData //.map(data => {return {...data, x: new Date(data.x)}}).slice(0,5)
         }
       ],
       chart: {
+        events: {
+          zoomed: (chartContext: any, { xaxis, yaxis }: { xaxis: any, yaxis: any }) => {
+            this.selectedTimeSpan = null;
+            console.log("zoomed", chartContext, xaxis, yaxis);
+          }
+        },
         height: 350,
         type: "candlestick",
         zoom: {
@@ -119,11 +65,15 @@ export class ChartComponent implements OnInit {
           autoScaleYaxis: true,
         }
       },
-      // title: {
-      //   text: "My First Angular Chart"
-      // },
       xaxis: {
-        type: "datetime"
+        type: "datetime",
+        tooltip: {
+          formatter: function (val: any) {
+            // console.log("formatter value: ", val)
+            let date = new Date(val);
+            return date.toLocaleString('default', { day: 'numeric', month: 'long', year: 'numeric' }) + ' ' + date.toLocaleTimeString().substring(0, 5);
+          }
+        }
       },
       plotOptions: {
         candlestick: {
@@ -139,31 +89,41 @@ export class ChartComponent implements OnInit {
       tooltip: {
         enabled: true,
         cssClass: "my-tooltip",
-        custom: ( {series, seriesIndex, dataPointIndex, w }:  {series: any, seriesIndex: any, dataPointIndex: any, w: any }) => {
+        custom: ({ series, seriesIndex, dataPointIndex, w }: { series: any, seriesIndex: any, dataPointIndex: any, w: any }) => {
           console.log("tooltip data: ", series,
-          seriesIndex,
-          dataPointIndex,
-          w)
-          this.ohlcOnHover = //w.globals.seriesCandleO[0][dataPointIndex];
-          { o: w.globals.seriesCandleO[0][dataPointIndex],
+            seriesIndex,
+            dataPointIndex,
+            w)
+          this.ohlcOnHover =
+          {
+            o: w.globals.seriesCandleO[0][dataPointIndex],
             h: w.globals.seriesCandleH[0][dataPointIndex],
             l: w.globals.seriesCandleL[0][dataPointIndex],
             c: w.globals.seriesCandleC[0][dataPointIndex]
           };
           this.cdr.detectChanges();
-
-
-          // return (
-          //   '<div class="arrow_box">' +
-          //   series[seriesIndex][dataPointIndex] +
-          //   "</div>"
-          // );
         }
       }
     };
   }
 
-  // public changeChartType() {
-  //   this.chartOptions.chart.type = "candlestick";
-  // }
+  callCandleAPI() {
+    this.chartDataService.getCandles(this.candlePayload).pipe(first()).subscribe({
+      next: (data: any) => {
+        this.updateChartOptions(data);
+      }
+    });
+  }
+
+  onSymbolChange(changedValue: string) {
+    this.candlePayload.symbol = changedValue;
+    this.callCandleAPI();
+  }
+
+  onTimeFrameChange(timeFrame: labelValuePair) {
+    this.selectedTimeSpan = timeFrame;
+    this.candlePayload.timeFrame = timeFrame.value;
+    this.callCandleAPI();
+  }
+
 }

@@ -1,0 +1,26 @@
+
+::ng-deep {
+    .data-table {
+        margin-top: 10px;
+        max-height: 410px;
+        overflow: auto;
+    }
+     
+    mat-row:hover {
+          background-color: aqua !important;
+        }
+      
+    
+    .my-tooltip {
+        display: none !important;
+      }
+      
+}
+
+.selected-symbol {
+    @apply bg-blue-400
+  }
+  
+  .selected-symbol:hover {
+    @apply bg-blue-400 #{!important};
+  }

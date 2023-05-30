@@ -71,7 +71,8 @@
               "browserTarget": "ohlc:build:production"
             },
             "development": {
-              "browserTarget": "ohlc:build:development"
+              "browserTarget": "ohlc:build:development",
+              "proxyConfig": "proxy.config.json"
             }
           },
           "defaultConfiguration": "development"
