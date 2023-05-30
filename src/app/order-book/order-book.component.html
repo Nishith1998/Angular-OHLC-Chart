@@ -1,1 +1,15 @@
 <p>order-book works!</p>
+
+<!-- <div>
+{{item.key}} {{item.value}} -->
+<div class="grid grid-cols-3">
+    <div>Price</div>
+    <div>Count</div>
+    <div>Total</div>
+</div>
+<div *ngFor="let item of bookMap | keyvalue" class="grid grid-cols-3">
+    <div>{{item.value[0]}}</div>
+    <div>{{item.value[1]}}</div>
+    <div>{{item.value[2]}}</div>
+</div>
+<!-- </div> -->
