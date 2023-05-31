@@ -8,22 +8,25 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatExpansionModule} from '@angular/material/expansion';
-import { SymbolTableComponent } from './symbol-table/symbol-table.component';
+import { TickersTableComponent } from './tickers-table/tickers-table.component';
 import { OrderBookComponent } from './order-book/order-book.component';
+import { LayoutComponent } from './layout/layout.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     ChartComponent,
-    SymbolTableComponent,
-    OrderBookComponent
+    TickersTableComponent,
+    OrderBookComponent,
+    LayoutComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +40,8 @@ import { OrderBookComponent } from './order-book/order-book.component';
     MatToolbarModule,
     MatIconModule,
     MatMenuModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -6,26 +6,47 @@ import { Subject } from 'rxjs';
 })
 export class WebsocketService {
 
-  sendMessage: Subject<any> = new Subject();
-  receiveMessage: Subject<any> = new Subject();
+  sendMessage: Subject<string> = new Subject();
+  receiveMessage: Subject<string> = new Subject();
+  connectionOpened: boolean;
+  ws: WebSocket;
+  
 
   constructor() { 
     console.log("WebSocket::connection request")
-    let ws = new WebSocket("wss://api-pub.bitfinex.com/ws/2");
-
-    this.sendMessage.subscribe((msg: any) => {
-      ws.onopen = (event) => {
-        ws.send(msg);
-      };
+    
+    this.setConnection();
+    this.ws.onopen = () => {
+      this.connectionOpened = true;
+    };
+    this.sendMessage.subscribe((msg: string) => {
+      if(this.connectionOpened) {
+        // console.log("sending message")
+        this.ws.send(msg);
+      } 
+      else if(this.connectionOpened == undefined){
+        // console.log("HERE I AM")
+        this.ws.onopen = () => {
+          this.ws.send(msg);
+        };
+      }
     })
 
-    ws.onmessage = (event) => {
+    this.ws.onmessage = (event) => {
       // console.log(event);
       this.receiveMessage.next(event.data);
       // console.log("websocket recieved data: ",event.data);
     };
     
 
+  }
+
+  setConnection() {
+    this.ws = new WebSocket("wss://api-pub.bitfinex.com/ws/2");
+  }
+
+  closeConnection() {
+    this.ws.close();
   }
 
 }

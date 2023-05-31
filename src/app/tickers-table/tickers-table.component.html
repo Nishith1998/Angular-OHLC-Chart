@@ -1,7 +1,6 @@
-<div class="text-lg">Symbol Table</div>
+<div class="text-lg">Tickers Table</div>
 <mat-table mat-table [dataSource]="getAllSymbols$" class="data-table mat-elevation-z8">
 
-    <!-- Position Column -->
     <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
         <mat-cell *matCellDef="let element"> {{element.symbol}} </mat-cell>
@@ -10,6 +9,15 @@
     <ng-container matColumnDef="last">
         <mat-header-cell *matHeaderCellDef> Last </mat-header-cell>
         <mat-cell *matCellDef="let element"> {{element.lastPrice}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="action">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let element;">
+            <button mat-icon-button (click)="$event.stopPropagation();openOrderBook(element)">
+                <mat-icon>open_in_new</mat-icon>
+            </button> 
+        </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

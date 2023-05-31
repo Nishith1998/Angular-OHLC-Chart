@@ -1,11 +1,9 @@
 <div class="h-full flex flex-col lg:flex-row gap-2">
-    
-    <app-symbol-table #symbolTable (symbolChange)="onSymbolChange($event)"></app-symbol-table>
 
     <div class="flex flex-col w-full h-full" *ngIf="chartOptions && chartData">
 
         <div>
-            <div class="pl-4">{{symbolTable.selectedSymbol}}</div>
+            <div class="pl-4">{{selectedSymbol}}</div>
             <div *ngIf="ohlcOnHover" class="flex pl-4 gap-2">
                 <span>O: {{ohlcOnHover.o}}</span>
                 <span>H: {{ohlcOnHover.h}}</span>
@@ -14,11 +12,12 @@
             </div>
         </div>
 
-        <apx-chart 
+        <apx-chart *ngIf="chartOptions.series && chartOptions.plotOptions && chartOptions.chart && chartOptions.xaxis && chartOptions.yaxis && chartOptions.tooltip"
             [series]="chartOptions.series" 
             [plotOptions]="chartOptions.plotOptions"
             [chart]="chartOptions.chart" 
             [xaxis]="chartOptions.xaxis"
+            [yaxis]="chartOptions.yaxis"
             [tooltip]="chartOptions.tooltip">
         </apx-chart>
 

@@ -1,6 +1,6 @@
-import { labelValuePair } from "./models";
+import { TimeFrame } from "./models";
 
-export const timeSpansList: labelValuePair[] = [
+export const timeSpansList: TimeFrame[] = [
     { label: '3y', value: '1W' },
     { label: '1y', value: '1D' },
     { label: '3m', value: '12h' },
@@ -14,60 +14,8 @@ export const timeSpansList: labelValuePair[] = [
 
 export const INITIAL_INDEX_FOR_CHART = 0;
 export const INITIAL_TIME_FRAME_FOR_CHART = '1m';
-
-// export const chartOptions =  {
-//     chart: {
-//       events: {
-//         zoomed: (chartContext: any, { xaxis, yaxis }: { xaxis: any, yaxis: any }) => {
-//           this.selectedTimeSpan = null;
-//           console.log("zoomed", chartContext, xaxis, yaxis);
-//         }
-//       },
-//       height: 350,
-//       type: "candlestick",
-//       zoom: {
-//         enabled: true,
-//         type: 'x',
-//         autoScaleYaxis: true,
-//       }
-//     },
-//     xaxis: {
-//       type: "datetime",
-//       tooltip: {
-//         formatter: function (val: any) {
-//           // console.log("formatter value: ", val)
-//           let date = new Date(val);
-//           return date.toLocaleString('default', { day: 'numeric', month: 'long', year: 'numeric' }) + ' ' + date.toLocaleTimeString().substring(0, 5);
-//         }
-//       }
-//     },
-//     plotOptions: {
-//       candlestick: {
-//         colors: {
-//           upward: "green",
-//           downward: "red"
-//         },
-//         wick: {
-//           useFillColor: true
-//         }
-//       }
-//     },
-//     tooltip: {
-//       enabled: true,
-//       cssClass: "my-tooltip",
-//       custom: ({ series, seriesIndex, dataPointIndex, w }: { series: any, seriesIndex: any, dataPointIndex: any, w: any }) => {
-//         console.log("tooltip data: ", series,
-//           seriesIndex,
-//           dataPointIndex,
-//           w)
-//         this.ohlcOnHover =
-//         {
-//           o: w.globals.seriesCandleO[0][dataPointIndex],
-//           h: w.globals.seriesCandleH[0][dataPointIndex],
-//           l: w.globals.seriesCandleL[0][dataPointIndex],
-//           c: w.globals.seriesCandleC[0][dataPointIndex]
-//         };
-//         this.cdr.detectChanges();
-//       }
-//     }
-//   }
+export const INITIAL_PAYLOAD_FOR_ORDERBOOK = {
+    event: 'subscribe',
+    channel: 'book',
+    symbol: 'tBTCUSD'
+};
