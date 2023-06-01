@@ -1,2 +1,2 @@
 # Ohlc
-[Demo](https://ohlc-chart-ngoswami.vercel.app/home)
+See live demo [here](https://ohlc-chart-ngoswami.vercel.app/home)
