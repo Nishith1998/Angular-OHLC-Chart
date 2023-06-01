@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 })
 export class TickersTableComponent {
 
-  getAllSymbols$: Observable<any>;
+  getAllSymbols$: Observable<TableDataType[]>;
   displayedColumns: string[] = ['name', 'last', 'action'];
   
   selectedSymbol!: string;

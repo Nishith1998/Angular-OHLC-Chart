@@ -1,8 +1,8 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ChartDataService } from '../services/chart-data.service';
 import { first } from 'rxjs';
-import { INITIAL_TIME_FRAME_FOR_CHART, timeSpansList } from '../constants';
-import { ChartDataType, ChartOptions, ChartPayload, TimeFrame, getChartOptions } from '../models';
+import { INITIAL_TIME_FRAME_FOR_CHART, getChartOptions, timeSpansList } from '../constants';
+import { ChartDataType, ChartOptions, ChartPayload, TimeFrame } from '../models';
 
 @Component({
   selector: 'app-chart',
@@ -36,7 +36,7 @@ export class ChartComponent implements OnInit {
   }
 
 
-  updateChartOptions(data: ChartDataType) {
+  updateChartOptions(data: ChartDataType): void {
     this.chartData = data;
     this.chartOptions.series = [
       {
@@ -48,7 +48,7 @@ export class ChartComponent implements OnInit {
 
   callCandleAPI() {
     this.chartDataService.getCandles(this.candlePayload).pipe(first()).subscribe({
-      next: (data: any) => {
+      next: (data: ChartDataType) => {
         this.updateChartOptions(data);
       }
     });

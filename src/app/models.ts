@@ -1,5 +1,4 @@
 import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexYAxis, ApexPlotOptions, ApexTooltip } from "ng-apexcharts";
-import { ChartComponent } from "./chart/chart.component";
 
 export type ChartOptions = {
     series?: ApexAxisChartSeries;
@@ -52,73 +51,3 @@ export const isUpdatedValuesFromWs = (x: any): x is UpdatedValuesFromWs => x.len
     typeof x[1] == 'number';
 
 export type GetAllSymbolsResp = [string, number, number, number, number, number, number, number, number, number, number];
-
-export const getChartOptions = function(this: ChartComponent): ChartOptions {
-    // if (this != undefined) {
-        return {
-            chart: {
-                events: {
-                    zoomed: (chartContext: any, { xaxis, yaxis }: { xaxis: any, yaxis: any }) => {
-                        this.selectedTimeSpan = null;
-                        // console.log("zoomed", chartContext, xaxis, yaxis);
-                    }
-                },
-                height: 350,
-                type: "candlestick",
-                zoom: {
-                    enabled: true,
-                    type: 'x',
-                    autoScaleYaxis: true,
-                }
-            },
-            xaxis: {
-                type: "datetime",
-                tooltip: {
-                    formatter: function (val: any) {
-                        // console.log("formatter value: ", val)
-                        let date = new Date(val);
-                        return date.toLocaleString('default', { day: 'numeric', month: 'long', year: 'numeric' }) + ' ' + date.toLocaleTimeString().substring(0, 5);
-                    }
-                }
-            },
-            yaxis: {
-                labels: {
-                    formatter: function (val, index) {
-                        return val.toFixed(2);
-                    }
-                }
-            },
-            plotOptions: {
-                candlestick: {
-                    colors: {
-                        upward: "yellow",
-                        downward: "red"
-                    },
-                    wick: {
-                        useFillColor: true
-                    }
-                }
-            },
-            tooltip: {
-                enabled: true,
-                cssClass: "my-tooltip",
-                custom: ({ series, seriesIndex, dataPointIndex, w }: { series: any, seriesIndex: any, dataPointIndex: any, w: any }) => {
-                    console.log("tooltip data: ", series,
-                        seriesIndex,
-                        dataPointIndex,
-                        w)
-                    this.ohlcOnHover =
-                    {
-                        o: w.globals.seriesCandleO[0][dataPointIndex],
-                        h: w.globals.seriesCandleH[0][dataPointIndex],
-                        l: w.globals.seriesCandleL[0][dataPointIndex],
-                        c: w.globals.seriesCandleC[0][dataPointIndex]
-                    };
-                    this.cdr.detectChanges();
-                }
-            }
-        }
-    // }
-    // else
-    //     return
-}

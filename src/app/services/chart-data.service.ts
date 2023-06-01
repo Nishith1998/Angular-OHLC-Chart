@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { WebsocketService } from './websocket.service';
-import { Subject, map, skipWhile } from 'rxjs';
-import { ChartPayload, GetAllSymbolsResp, TableDataType } from '../models';
+import { Observable, Subject, map, skipWhile } from 'rxjs';
+import { ChartDataType, ChartPayload, GetAllSymbolsResp, TableDataType } from '../models';
 
 const INDEX_OF_ORDERBOOK_ARRAY = 1;
 
@@ -15,13 +15,13 @@ export class ChartDataService {
 
   constructor(private http: HttpClient, private ws: WebsocketService) { }
 
-  getCandles(msg: ChartPayload) {
-    return this.http.post('api/getCandles', msg);
+  getCandles(msg: ChartPayload): Observable<ChartDataType> {
+    return this.http.post<ChartDataType>('api/getCandles', msg);
   }
 
-  getAllSymbols() {
-    return this.http.get('api/getAllSymbols').pipe(
-      map((sybmolData: any) => {
+  getAllSymbols(): Observable<TableDataType[]> {
+    return this.http.get<GetAllSymbolsResp[]>('api/getAllSymbols').pipe(
+      map((sybmolData: GetAllSymbolsResp[]) => {
         return TableDataType.mapToTableDataType(sybmolData);
       })
     )
