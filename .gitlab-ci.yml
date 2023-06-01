@@ -2,11 +2,11 @@
 image: node:latest
 # Functions that should be executed before the build script is run
 before_script:
+  - npm i -g @angular/cli
   - npm install
   - npm start
 pages:
   script:
-    - npm install
     - ng build --configuration production
   artifacts:
     paths:
