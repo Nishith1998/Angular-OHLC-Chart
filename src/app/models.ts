@@ -16,6 +16,12 @@ export type TimeFrame = {
 
 const INDEX_OF_SYMBOL = 0;
 const INDEX_OF_LASTPRICE = 1;
+const INDEX_OF_EPOCHTIME = 0;
+const INDEX_OF_OPENVALUE = 1;
+const INDEX_OF_HIGHVALUE = 2;
+const INDEX_OF_CLOSEVALUE = 3;
+const INDEX_OF_LOWVALUE = 4;
+
 export class TableDataType {
     symbol: string;
     lastPrice: number;
@@ -30,7 +36,7 @@ export class TableDataType {
 export type ChartDataType = {
     x: number;
     y: [number, number, number, number];
-}[];
+};
 
 export type ChartPayload = {
     symbol: string;
@@ -51,3 +57,20 @@ export const isUpdatedValuesFromWs = (x: any): x is UpdatedValuesFromWs => x.len
     typeof x[1] == 'number';
 
 export type GetAllSymbolsResp = [string, number, number, number, number, number, number, number, number, number, number];
+
+export type getCandleList = [number, number, number, number, number, number]
+export type getCandleResp = getCandleList[];
+
+export const candleMapping = (data: getCandleResp): ChartDataType[] => {
+    return data.map((ele: getCandleList): ChartDataType => {
+        return {
+            x: ele[INDEX_OF_EPOCHTIME],
+            y: [
+                ele[INDEX_OF_OPENVALUE], 
+                ele[INDEX_OF_HIGHVALUE], 
+                ele[INDEX_OF_CLOSEVALUE], 
+                ele[INDEX_OF_LOWVALUE]
+            ]
+        }
+    })
+}

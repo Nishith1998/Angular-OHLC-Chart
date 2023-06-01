@@ -11,7 +11,7 @@ import { ChartDataType, ChartOptions, ChartPayload, TimeFrame } from '../models'
 })
 export class ChartComponent implements OnInit {
 
-  chartData: ChartDataType;
+  chartData: ChartDataType[];
   chartOptions: ChartOptions;
   candlePayload: ChartPayload;
   ohlcOnHover: { o: number; h: number; l: number; c: number; };
@@ -36,7 +36,7 @@ export class ChartComponent implements OnInit {
   }
 
 
-  updateChartOptions(data: ChartDataType): void {
+  updateChartOptions(data: ChartDataType[]): void {
     this.chartData = data;
     this.chartOptions.series = [
       {
@@ -48,7 +48,7 @@ export class ChartComponent implements OnInit {
 
   callCandleAPI() {
     this.chartDataService.getCandles(this.candlePayload).pipe(first()).subscribe({
-      next: (data: ChartDataType) => {
+      next: (data: ChartDataType[]) => {
         this.updateChartOptions(data);
       }
     });
