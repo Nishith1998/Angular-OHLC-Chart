@@ -1,12 +1,12 @@
 import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexYAxis, ApexPlotOptions, ApexTooltip } from "ng-apexcharts";
 
 export type ChartOptions = {
-    series?: ApexAxisChartSeries;
-    chart?: ApexChart;
-    xaxis?: ApexXAxis;
-    yaxis?: ApexYAxis;
-    plotOptions?: ApexPlotOptions;
-    tooltip?: ApexTooltip;
+    series: ApexAxisChartSeries;
+    chart: ApexChart;
+    xaxis: ApexXAxis;
+    yaxis: ApexYAxis;
+    plotOptions: ApexPlotOptions;
+    tooltip: ApexTooltip;
 };
 
 export type TimeFrame = {

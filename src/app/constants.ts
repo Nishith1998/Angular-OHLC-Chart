@@ -28,6 +28,12 @@ export const INITIAL_PAYLOAD_FOR_ORDERBOOK = {
 
 export const getChartOptions = function (this: ChartComponent): ChartOptions {
     return {
+        series: [
+            {
+              name: "My-series",
+              data: this.chartData
+            }
+          ],
         chart: {
             events: {
                 zoomed: () => {
@@ -63,7 +69,7 @@ export const getChartOptions = function (this: ChartComponent): ChartOptions {
         plotOptions: {
             candlestick: {
                 colors: {
-                    upward: "yellow",
+                    upward: "green",
                     downward: "red"
                 },
                 wick: {
