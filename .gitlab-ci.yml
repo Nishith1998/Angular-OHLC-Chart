@@ -1,11 +1,13 @@
+# The Docker image that will be used to build your app
+image: node:lts
 # Functions that should be executed before the build script is run
 before_script:
   - npm i -g @angular/cli
   - npm install
-  - npm start
+  - ng build --configuration production
 pages:
   script:
-    - ng build --configuration production
+    - node api.js
   artifacts:
     paths:
       # The folder that contains the files to be exposed at the Page URL
