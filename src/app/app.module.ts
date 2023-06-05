@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ChartComponent } from './chart/chart.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
@@ -19,6 +19,10 @@ import { TickersTableComponent } from './tickers-table/tickers-table.component';
 import { OrderBookComponent } from './order-book/order-book.component';
 import { LayoutComponent } from './layout/layout.component';
 import { TablePipe } from './tickers-table/table.pipe';
+import { LoadingComponent } from './loading/loading.component';
+import { LoadingInterceptor } from './services/loading-interceptor';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {OverlayModule} from '@angular/cdk/overlay';
 
 
 @NgModule({
@@ -28,7 +32,8 @@ import { TablePipe } from './tickers-table/table.pipe';
     TickersTableComponent,
     OrderBookComponent,
     LayoutComponent,
-    TablePipe
+    TablePipe,
+    LoadingComponent
   ],
   imports: [
     CommonModule,
@@ -43,9 +48,13 @@ import { TablePipe } from './tickers-table/table.pipe';
     MatIconModule,
     MatMenuModule,
     MatExpansionModule,
-    MatCardModule
+    MatCardModule,
+    MatProgressSpinnerModule,
+    OverlayModule
   ],
-  providers: [],
+  providers: [    {
+    provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

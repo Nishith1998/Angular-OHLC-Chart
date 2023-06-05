@@ -1,0 +1,10 @@
+<!-- <p *ngIf="loadingService.getLoading()">loading works!</p> -->
+<!-- <mat-progress-bar *ngIf="loadingService.getLoading()" mode="indeterminate"></mat-progress-bar> -->
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOpen]="loadingService.getLoading()"
+>
+<div class="absolute h-screen w-screen bg-blue-50 opacity-50 flex justify-center items-center">
+    <mat-spinner color="primary"></mat-spinner>
+</div>
+</ng-template>

@@ -22,7 +22,7 @@ export class OrderBookComponent {
   bookPayload: OrderBookPayload;
 
   constructor(private route: ActivatedRoute, private chartDataService: ChartDataService, private ws: WebsocketService) {
-
+    this.ws.setConnection();
   }
 
   ngOnInit() {
@@ -41,21 +41,21 @@ export class OrderBookComponent {
     // On Select OrdbookApi Call implmentation
     this.chartDataService.selectedSymbol.subscribe((selectedValue: string) => {
       if(selectedValue) {
-        this.bookMap = new Map();
-        this.asksMap = new Map();
-        this.bidsMap = new Map();
         this.onSymbolChange(selectedValue);
       }
     })
   }
 
   onSymbolChange(value: string) {
+    this.bookMap = new Map();
+    this.asksMap = new Map();
+    this.bidsMap = new Map();
     this.bookPayload.symbol = value;
     this.callOrderBookAPI();
   }
 
   callOrderBookAPI() {
-    this.chartDataService.getOrderBookData(this.bookPayload).pipe().subscribe(data => {
+    this.chartDataService.getOrderBookData(this.bookPayload).subscribe(data => {
       this.updateBookMap(data);
     })
   }
@@ -100,5 +100,9 @@ export class OrderBookComponent {
       // console.log(itemValue, list)
       itemValue[2] = list[index-1].value[2] + itemValue[1];
     }
+  }
+
+  ngOnDestroy() {
+    this.ws.closeConnection();
   }
 }

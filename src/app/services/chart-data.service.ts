@@ -20,7 +20,8 @@ export class ChartDataService {
   }
 
   getCandles(payload: ChartPayload): Observable<ChartDataType[]> {
-    return this.http.get<getCandleResp>(URLs.getCandles + payload.timeFrame + '%3A'+ payload.symbol + '/hist').pipe(
+    return this.http.post<getCandleResp>(URLs.getCandles, payload)//this.http.get<getCandleResp>(URLs.getCandles + payload.timeFrame + '%3A'+ payload.symbol + '/hist')
+    .pipe(
       map((candleData: getCandleResp) => {
         return candleMapping(candleData);
       })

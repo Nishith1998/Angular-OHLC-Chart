@@ -2,8 +2,8 @@ import { ChartComponent } from "./chart/chart.component";
 import { ChartOptions, TimeFrame } from "./models";
 
 export const URLs = {
-    getCandles: 'https://api-pub.bitfinex.com/v2/candles/trade%3A',
-    getAllSymbols: 'https://api-pub.bitfinex.com/v2/tickers?symbols=ALL'
+    getCandles: 'api/getCandles', // 'https://api-pub.bitfinex.com/v2/candles/trade%3A',
+    getAllSymbols: 'api/getAllSymbols' // 'https://api-pub.bitfinex.com/v2/tickers?symbols=ALL'
 }
 
 export const timeSpansList: TimeFrame[] = [
