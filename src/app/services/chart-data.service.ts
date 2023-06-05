@@ -13,8 +13,11 @@ const INDEX_OF_ORDERBOOK_ARRAY = 1;
 export class ChartDataService {
 
   selectedSymbol: Subject<string> = new Subject();
+  selectedSymbolValue: string;
 
-  constructor(private http: HttpClient, private ws: WebsocketService) { }
+  constructor(private http: HttpClient, private ws: WebsocketService) { 
+    this.selectedSymbol.subscribe(data => { if(data) this.selectedSymbolValue = data });
+  }
 
   getCandles(payload: ChartPayload): Observable<ChartDataType[]> {
     return this.http.get<getCandleResp>(URLs.getCandles + payload.timeFrame + '%3A'+ payload.symbol + '/hist').pipe(

@@ -23,8 +23,10 @@ export class TickersTableComponent {
 
   ngOnInit() {
     this.getAllSymbols$.subscribe((symbols: TableDataType[]) => {
-      if (symbols) {
+      if (symbols && !this.chartDataService.selectedSymbolValue) {
         this.onSymbolSelect(symbols[INITIAL_INDEX_FOR_CHART].symbol);
+      } else {
+        this.onSymbolSelect(this.chartDataService.selectedSymbolValue);
       }
     });
     this.chartDataService.selectedSymbol.subscribe((selectedValue: string) => {
@@ -38,6 +40,10 @@ export class TickersTableComponent {
 
   openOrderBook(rowData: TableDataType) {
     console.log("rowData: ", rowData);
-    this.router.navigate(['/orderBook'], {queryParams: {symbol: rowData.symbol}})
+    if(this.router.routerState.snapshot.url.startsWith('/home'))
+      this.router.navigate(['/orderBook'], {queryParams: {symbol: rowData.symbol}});
+    else if(this.router.routerState.snapshot.url.startsWith('/orderBook'))
+      this.router.navigate(['/home'], {queryParams: {symbol: rowData.symbol}});
+    
   }
 }

@@ -69,7 +69,7 @@ export const getChartOptions = function (this: ChartComponent): ChartOptions {
         plotOptions: {
             candlestick: {
                 colors: {
-                    upward: "green",
+                    upward: "black",
                     downward: "red"
                 },
                 wick: {

@@ -18,6 +18,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import { TickersTableComponent } from './tickers-table/tickers-table.component';
 import { OrderBookComponent } from './order-book/order-book.component';
 import { LayoutComponent } from './layout/layout.component';
+import { TablePipe } from './tickers-table/table.pipe';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { LayoutComponent } from './layout/layout.component';
     ChartComponent,
     TickersTableComponent,
     OrderBookComponent,
-    LayoutComponent
+    LayoutComponent,
+    TablePipe
   ],
   imports: [
     CommonModule,
