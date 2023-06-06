@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { ChartDataService } from '../services/chart-data.service';
 import { INITIAL_PAYLOAD_FOR_ORDERBOOK } from '../constants';
 import { OrderBookPayload, UpdatedValuesFromWs, isUpdatedValuesFromWs } from '../models';
@@ -15,13 +15,12 @@ const INDEX_OF_PRICE = 0;
   styleUrls: ['./order-book.component.scss']
 })
 export class OrderBookComponent {
-  bookMap: Map<number, [number, number, number]> = new Map();
   bidsMap: Map<number, [number, number, number, number]> = new Map();
   asksMap: Map<number, [number, number, number, number]> = new Map();
   displayedColumns: string[] = ['']
   bookPayload: OrderBookPayload;
 
-  constructor(private route: ActivatedRoute, private chartDataService: ChartDataService, private ws: WebsocketService) {
+  constructor(public changeDetectorRef: ChangeDetectorRef, private route: ActivatedRoute, private chartDataService: ChartDataService, private ws: WebsocketService) {
     this.ws.setConnection();
   }
 
@@ -47,9 +46,12 @@ export class OrderBookComponent {
   }
 
   onSymbolChange(value: string) {
-    this.bookMap = new Map();
-    this.asksMap = new Map();
-    this.bidsMap = new Map();
+    // setTimeout(() => {
+      this.asksMap.clear();
+      this.bidsMap.clear();
+      this.changeDetectorRef.detectChanges();
+    // }, 0)
+
     this.bookPayload.symbol = value;
     this.callOrderBookAPI();
   }
@@ -71,34 +73,55 @@ export class OrderBookComponent {
         } else {
           this.bidsMap.set(price, [count, Math.abs(amount), 0, price]);
         }
-        this.bookMap.set(updatedValue[INDEX_OF_PRICE], updatedValue);
       } else {
-        this.bookMap.delete(updatedValue[INDEX_OF_PRICE]);
+        this.asksMap.delete(updatedValue[INDEX_OF_PRICE]);
+        this.bidsMap.delete(updatedValue[INDEX_OF_PRICE]);
       }
-    } else if (typeof updatedValue[1] != 'string') {
+    } else if (updatedValue && typeof updatedValue[1] != 'string') {
       // console.log("this is data first", updatedValue);
-      let totalForBids = 0;
-      let totalForAsks = 0;
+      // let totalForBids = 0;
+      // let totalForAsks = 0;
       updatedValue.forEach(([price, count, amount]: [price:number, count:number, amount:number]) => {
         if(amount < 0) {
-          totalForAsks += Math.abs(amount);
-          this.asksMap.set(price, [count, Math.abs(amount), totalForAsks, price]);
+          // totalForAsks += Math.abs(amount);
+          this.asksMap.set(price, [count, Math.abs(amount), 0, price]);
         } else { // amount > 0
-          totalForBids += amount;
-          this.bidsMap.set(price, [count, amount, totalForBids, price])
+          // totalForBids += amount;
+          this.bidsMap.set(price, [count, amount, 0, price])
         }
         // this.bookMap.set(element[INDEX_OF_PRICE], element);
       });
     }
   }
+  minBid: number;
+  maxBid: number;
+  calcTotalBid(index: number, itemValue: any[], list: any[]) {
 
-  calcTotal(index: number, itemValue: any[], list: any[]) {
     if(index == 0) {
+      this.minBid = itemValue[1];
       itemValue[2] = itemValue[1];
       // return itemValue[1];
     } else {
       // console.log(itemValue, list)
       itemValue[2] = list[index-1].value[2] + itemValue[1];
+      if(index == 18)
+        this.maxBid = itemValue[2];
+    }
+  }
+
+  minAsk: number;
+  maxAsk: number;
+  calcTotalAsk(index: number, itemValue: any[], list: any[]) {
+
+    if(index == 0) {
+      this.minAsk = itemValue[1];
+      itemValue[2] = itemValue[1];
+      // return itemValue[1];
+    } else {
+      // console.log(itemValue, list)
+      itemValue[2] = list[index-1].value[2] + itemValue[1];
+      if(index == 18)
+        this.maxAsk = itemValue[2];
     }
   }
 

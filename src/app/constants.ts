@@ -92,7 +92,7 @@ export const getChartOptions = function (this: ChartComponent): ChartOptions {
                     l: w.globals.seriesCandleL[0][dataPointIndex],
                     c: w.globals.seriesCandleC[0][dataPointIndex]
                 };
-                this.cdr.detectChanges();
+                this.changeDetectorRef.detectChanges();
             }
         }
     }

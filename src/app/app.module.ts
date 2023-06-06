@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -23,6 +23,13 @@ import { LoadingComponent } from './loading/loading.component';
 import { LoadingInterceptor } from './services/loading-interceptor';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {OverlayModule} from '@angular/cdk/overlay';
+
+class MyErrorHandler implements ErrorHandler {
+  handleError(error: any) {
+    // do something with the exception
+    // console.log("error:", error)
+  }
+}
 
 
 @NgModule({
@@ -54,7 +61,8 @@ import {OverlayModule} from '@angular/cdk/overlay';
   ],
   providers: [    {
     provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true
-  }],
+  },
+  {provide: ErrorHandler, useClass: MyErrorHandler}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

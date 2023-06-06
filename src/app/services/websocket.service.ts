@@ -15,17 +15,13 @@ export class WebsocketService {
   constructor() { 
     console.log("WebSocket::connection request")
     
-    // this.setConnection();
-    // this.ws.onopen = () => {
-    //   this.connectionOpened = true;
-    // };
     this.sendMessage.subscribe((msg: string) => {
-      if(this.connectionOpened) {
+      if(this.connectionOpened && this.ws.readyState == 1) {
         console.log("sending message")
         this.ws.send(msg);
       } 
-      else if(this.connectionOpened == undefined){
-        console.log("HERE I AM")
+      else {//if(this.connectionOpened == undefined){
+        console.log("Connection not opened yet...")
         this.ws.onopen = () => {
           console.log("connectionOpened")
           this.connectionOpened = true;
@@ -39,13 +35,14 @@ export class WebsocketService {
 
   setConnection() {
     this.ws = new WebSocket("wss://api-pub.bitfinex.com/ws/2");
-    this.ws.onopen = () => {
-      this.connectionOpened = true;
-    };
     this.ws.onmessage = (event) => {
-      // console.log(event);
       this.receiveMessage.next(event.data);
-      console.log("websocket recieved data: ",event.data);
+      // console.log("websocket recieved data: ",event.data);
+    };
+    this.ws.onopen = () => {
+      console.log("connectionOpened")
+      this.connectionOpened = true;
+      // this.ws.send(msg);
     };
   }
 

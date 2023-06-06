@@ -17,11 +17,7 @@ export class LayoutComponent {
     this.route.queryParams.pipe(first()).subscribe((params: Params) => {
       // console.log("Params: ",params['symbol']);
       if (params['symbol']) {
-        // this.ws.closeConnection();
-        // this.ws.setConnection();
-        // this.bookMap = new Map();
         this.chartDataService.selectedSymbol.next(params['symbol']);
-        // this.onSymbolChange(params['symbol']);
       }
     })
   }

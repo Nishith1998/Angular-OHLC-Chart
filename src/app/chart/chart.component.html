@@ -3,7 +3,7 @@
     <div class="flex flex-col w-full h-full" *ngIf="chartOptions && chartData">
 
         <div>
-            <div class="pl-4">{{selectedSymbol}}</div>
+            <div class="pl-4 text-lg">{{selectedSymbol.substring(1,4)}}/{{selectedSymbol.substring(4)}}</div>
             <div *ngIf="ohlcOnHover" class="flex pl-4 gap-2">
                 <span>O: {{ohlcOnHover.o}}</span>
                 <span>H: {{ohlcOnHover.h}}</span>

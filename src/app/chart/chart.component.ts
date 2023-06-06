@@ -20,7 +20,7 @@ export class ChartComponent implements OnInit {
   selectedTimeSpan: { label: string, value: string } | null;
   selectedSymbol: string;
 
-  constructor(public cdr: ChangeDetectorRef, private chartDataService: ChartDataService) { }
+  constructor(public changeDetectorRef: ChangeDetectorRef, private chartDataService: ChartDataService) { }
 
   ngOnInit() {
     this.chartOptions = getChartOptions.apply(this);
