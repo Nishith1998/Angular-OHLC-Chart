@@ -5,10 +5,10 @@ stages:
 build:
   stage: build
   script:
-    - npm ci
+    - npm i
     - ng build --configuration production
 
 deploy:
   stage: deploy
   script:
-    - node api.js
+    - npm start
