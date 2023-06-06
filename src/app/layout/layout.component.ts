@@ -15,7 +15,6 @@ export class LayoutComponent {
 
   ngOnInit() {
     this.route.queryParams.pipe(first()).subscribe((params: Params) => {
-      // console.log("Params: ",params['symbol']);
       if (params['symbol']) {
         this.chartDataService.selectedSymbol.next(params['symbol']);
       }

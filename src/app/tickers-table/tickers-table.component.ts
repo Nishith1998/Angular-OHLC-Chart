@@ -14,6 +14,7 @@ export class TickersTableComponent {
 
   getAllSymbols$: Observable<TableDataType[]>;
   displayedColumns: string[] = ['name', 'last', 'action'];
+  groupByColumns = ['name'];
   
   selectedSymbol!: string;
 
@@ -45,5 +46,8 @@ export class TickersTableComponent {
     else if(this.router.routerState.snapshot.url.startsWith('/orderBook'))
       this.router.navigate(['/home'], {queryParams: {symbol: rowData.symbol}});
     
+  }
+  isGroup(index: number, item: any): boolean {
+    return item.isGroupBy;
   }
 }

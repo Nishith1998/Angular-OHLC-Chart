@@ -13,17 +13,16 @@ export class WebsocketService {
   
 
   constructor() { 
-    console.log("WebSocket::connection request")
     
     this.sendMessage.subscribe((msg: string) => {
       if(this.connectionOpened && this.ws.readyState == 1) {
-        console.log("sending message")
+        // console.log("sending message")
         this.ws.send(msg);
       } 
-      else {//if(this.connectionOpened == undefined){
+      else {
         console.log("Connection not opened yet...")
         this.ws.onopen = () => {
-          console.log("connectionOpened")
+          // console.log("connectionOpened")
           this.connectionOpened = true;
           this.ws.send(msg);
         };
@@ -42,7 +41,6 @@ export class WebsocketService {
     this.ws.onopen = () => {
       console.log("connectionOpened")
       this.connectionOpened = true;
-      // this.ws.send(msg);
     };
   }
 

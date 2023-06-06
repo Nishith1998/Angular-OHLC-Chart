@@ -1,10 +1,10 @@
 <!-- <tickers-table></tickers-table> -->
+<button class="flex self-left m-4" mat-stroked-button [routerLink]="'/home'">Back to Chart</button>
 <div class="flex flex-row p-4 gap-8 justify-center items-center">
     <section class="flex flex-col">
         <tickers-table></tickers-table>
     </section>
     <section class="flex flex-col justify-between items-center">
-        <button class="flex self-left m-4" mat-stroked-button [routerLink]="'/home'">Back to Chart</button>
         <!-- {{bookMap.size}} -->
         <div class="flex flex-row gap-4">
             <mat-card>
@@ -29,18 +29,18 @@
             <mat-card>
                 <div class="flex flex-col m-4 h-96 overflow-y-hidden">
                     <div class="grid grid-cols-4 text-lg">
-                        <div class="text-center">Count</div>
-                        <div class="text-center">Amount</div>
-                        <div class="text-center">Total</div>
                         <div class="text-center">Price</div>
+                        <div class="text-center">Total</div>
+                        <div class="text-center">Amount</div>
+                        <div class="text-center">Count</div>
                     </div>
                     <div *ngFor="let index=index;let item of (asksMap | keyvalue).reverse() | slice : 0: 19 as data" class="grid grid-cols-4">
                         <div *ngIf="index != 18" [style.maxWidth]="'250px'" [style.top]="((index * 20)+42) + 'px'" [style.width]="((item.value[2] - minAsk) / (maxAsk - minAsk))*250 + 'px'" class="z-0 absolute h-6 left-4 bg-red-200"></div>
                         
-                        <div class="z-10 text-center">{{item.value[0] | number}}</div>
-                        <div class="z-10 text-center">{{item.value[1] | number}}</div>
+                        <div class="z-10 text-left">{{item.value[3]}}</div>
                         <div class="z-10 text-center">{{calcTotalAsk(index, item.value, data)}}{{item.value[2] | number}}</div>
-                        <div class="z-10 text-center">{{item.value[3]}}</div>
+                        <div class="z-10 text-center">{{item.value[1] | number}}</div>
+                        <div class="z-10 text-center">{{item.value[0] | number}}</div>
                     </div>
                 </div>
             </mat-card>

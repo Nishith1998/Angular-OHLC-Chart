@@ -8,6 +8,7 @@ import { first } from 'rxjs';
 
 const INDEX_OF_COUNT = 1;
 const INDEX_OF_PRICE = 0;
+const INITIAL_TOTAL = 0;
 
 @Component({
   selector: 'app-order-book',
@@ -27,13 +28,8 @@ export class OrderBookComponent {
   ngOnInit() {
     this.bookPayload = INITIAL_PAYLOAD_FOR_ORDERBOOK;
     this.route.queryParams.pipe(first()).subscribe((params: Params) => {
-      // console.log("Params: ",params['symbol']);
       if (params['symbol']) {
-        // this.ws.closeConnection();
-        // this.ws.setConnection();
-        // this.bookMap = new Map();
         this.chartDataService.selectedSymbol.next(params['symbol']);
-        // this.onSymbolChange(params['symbol']);
       }
     })
 
@@ -46,11 +42,9 @@ export class OrderBookComponent {
   }
 
   onSymbolChange(value: string) {
-    // setTimeout(() => {
       this.asksMap.clear();
       this.bidsMap.clear();
       this.changeDetectorRef.detectChanges();
-    // }, 0)
 
     this.bookPayload.symbol = value;
     this.callOrderBookAPI();
@@ -64,35 +58,28 @@ export class OrderBookComponent {
 
   updateBookMap(updatedValue: UpdatedValuesFromWs | UpdatedValuesFromWs[]) {
     if (isUpdatedValuesFromWs(updatedValue)) {
-      // console.log("this is data update", updatedValue);
       let [price,count, amount] = [...updatedValue];
       if (updatedValue[INDEX_OF_COUNT] != 0) {
         if(updatedValue[2] < 0) {
-          // let totalForAsk = amount < updatedValue[]
-          this.asksMap.set(price, [count, Math.abs(amount), 0, price]);
+          this.asksMap.set(price, [count, Math.abs(amount), INITIAL_TOTAL, price]);
         } else {
-          this.bidsMap.set(price, [count, Math.abs(amount), 0, price]);
+          this.bidsMap.set(price, [count, Math.abs(amount), INITIAL_TOTAL, price]);
         }
       } else {
         this.asksMap.delete(updatedValue[INDEX_OF_PRICE]);
         this.bidsMap.delete(updatedValue[INDEX_OF_PRICE]);
       }
     } else if (updatedValue && typeof updatedValue[1] != 'string') {
-      // console.log("this is data first", updatedValue);
-      // let totalForBids = 0;
-      // let totalForAsks = 0;
       updatedValue.forEach(([price, count, amount]: [price:number, count:number, amount:number]) => {
         if(amount < 0) {
-          // totalForAsks += Math.abs(amount);
-          this.asksMap.set(price, [count, Math.abs(amount), 0, price]);
+          this.asksMap.set(price, [count, Math.abs(amount), INITIAL_TOTAL, price]);
         } else { // amount > 0
-          // totalForBids += amount;
-          this.bidsMap.set(price, [count, amount, 0, price])
+          this.bidsMap.set(price, [count, amount, INITIAL_TOTAL, price])
         }
-        // this.bookMap.set(element[INDEX_OF_PRICE], element);
       });
     }
   }
+
   minBid: number;
   maxBid: number;
   calcTotalBid(index: number, itemValue: any[], list: any[]) {
@@ -100,9 +87,7 @@ export class OrderBookComponent {
     if(index == 0) {
       this.minBid = itemValue[1];
       itemValue[2] = itemValue[1];
-      // return itemValue[1];
     } else {
-      // console.log(itemValue, list)
       itemValue[2] = list[index-1].value[2] + itemValue[1];
       if(index == 18)
         this.maxBid = itemValue[2];
@@ -116,9 +101,7 @@ export class OrderBookComponent {
     if(index == 0) {
       this.minAsk = itemValue[1];
       itemValue[2] = itemValue[1];
-      // return itemValue[1];
     } else {
-      // console.log(itemValue, list)
       itemValue[2] = list[index-1].value[2] + itemValue[1];
       if(index == 18)
         this.maxAsk = itemValue[2];

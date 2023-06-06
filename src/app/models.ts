@@ -24,12 +24,29 @@ const INDEX_OF_LOWVALUE = 4;
 
 export class TableDataType {
     symbol: string;
-    lastPrice: number;
+    lastPrice?: number;
+    isGroupBy?: boolean;
 
     static mapToTableDataType(options: GetAllSymbolsResp[]): TableDataType[] {
-        return options.map((ele: GetAllSymbolsResp) => {
-            return { symbol: ele[INDEX_OF_SYMBOL], lastPrice: ele[INDEX_OF_LASTPRICE] }
+        let dataMap = new Map();
+        options.forEach(ele => {
+            let key = ele[INDEX_OF_SYMBOL].substring(1,4);
+            if(dataMap.has(key)) {
+                dataMap.get(key).push({symbol: ele[INDEX_OF_SYMBOL], lastPrice: ele[INDEX_OF_LASTPRICE]})
+            } else {
+                // dataMap.set(key, [])
+                dataMap.set(key, [{symbol: key, isGroupBy: true}, {symbol: ele[INDEX_OF_SYMBOL], lastPrice: ele[INDEX_OF_LASTPRICE]}])
+            }
+        });
+        let ansArr: TableDataType[] = [];
+        dataMap.forEach(ele => {
+            ansArr.push(...ele)
         })
+        return ansArr;
+        // return options.map((ele: GetAllSymbolsResp) => {
+        //     return { symbol: ele[INDEX_OF_SYMBOL], lastPrice: ele[INDEX_OF_LASTPRICE] }
+        // });
+
     }
 }
 
