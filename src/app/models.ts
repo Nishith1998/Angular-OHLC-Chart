@@ -26,16 +26,17 @@ export class TableDataType {
     symbol: string;
     lastPrice?: number;
     isGroupBy?: boolean;
+    symbolValue: string;
 
     static mapToTableDataType(options: GetAllSymbolsResp[]): TableDataType[] {
         let dataMap = new Map();
         options.forEach(ele => {
             let key = ele[INDEX_OF_SYMBOL].substring(1,4);
             if(dataMap.has(key)) {
-                dataMap.get(key).push({symbol: ele[INDEX_OF_SYMBOL], lastPrice: ele[INDEX_OF_LASTPRICE]})
+                dataMap.get(key).push({symbol: ele[INDEX_OF_SYMBOL], lastPrice: ele[INDEX_OF_LASTPRICE], symbolValue: ''})
             } else {
                 // dataMap.set(key, [])
-                dataMap.set(key, [{symbol: key, isGroupBy: true}, {symbol: ele[INDEX_OF_SYMBOL], lastPrice: ele[INDEX_OF_LASTPRICE]}])
+                dataMap.set(key, [{symbol: ele[INDEX_OF_SYMBOL], lastPrice: ele[INDEX_OF_LASTPRICE], symbolValue: ele[INDEX_OF_SYMBOL]}])
             }
         });
         let ansArr: TableDataType[] = [];

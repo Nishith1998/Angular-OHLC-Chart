@@ -47,7 +47,7 @@ export class TickersTableComponent {
       this.router.navigate(['/home'], {queryParams: {symbol: rowData.symbol}});
     
   }
-  isGroup(index: number, item: any): boolean {
-    return item.isGroupBy;
-  }
+  // isGroup(index: number, item: any): boolean {
+  //   return item.isGroupBy;
+  // }
 }

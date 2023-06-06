@@ -8,9 +8,9 @@ export class TablePipe implements PipeTransform {
 
   transform(value: TableDataType, type: string): string {
     if(type == 'name')
-      return value.symbol.substring(1,4);
+      return value.symbolValue.substring(1,4);
     else if( type == 'unit')
-      return value.symbol.substring(4,);
+      return value.symbol.substring(4,).replace(':', '').replace('F0', '').replace('F0', '');
     else
       return ''
   }

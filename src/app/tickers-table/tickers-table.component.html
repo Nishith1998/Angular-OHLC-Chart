@@ -34,12 +34,12 @@
         *matRowDef="let row; columns: displayedColumns"
     ></mat-row>
 
-    <ng-container matColumnDef="groupHeader">
+    <!-- <ng-container matColumnDef="groupHeader">
 		<mat-cell colspan="999" *matCellDef="let group">
       <mat-icon *ngIf="group.expanded">expand_less</mat-icon>
       <mat-icon *ngIf="!group.expanded">expand_more</mat-icon>
 			<strong>{{group.symbol}} ({{group.totalCounts}})</strong>
       </mat-cell>
   </ng-container>
-    <mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup"> </mat-row>
+    <mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup"> </mat-row> -->
 </mat-table>
