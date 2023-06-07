@@ -7,16 +7,11 @@ server.set('port', 9000);
 server.use(express.static(__dirname + '/dist/ohlc'));
 
 server.use(express.json())
-  
+
 
 server.listen(server.get('port'), function () {
     console.log('Express server listening on port ' + server.get('port'));
 });
-
-// server.get('/',(req, res) => {
-//     console.log("adf");
-//     res.json('asdf');
-// })
 
 server.post('/api/getCandles', (req, res) => {
     console.log("this is req", req.body)
