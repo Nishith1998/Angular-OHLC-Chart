@@ -73,7 +73,7 @@ export type OrderBookPayload = {
 
 export type UpdatedValuesFromWs = [number, number, number];
 
-export const isUpdatedValuesFromWs = (x: any): x is UpdatedValuesFromWs => x && x.length == 3 &&
+export const isUpdatedValuesFromWs = (x: unknown[]): x is UpdatedValuesFromWs => x && x.length == 3 &&
     typeof x[0] == 'number' &&
     typeof x[1] == 'number' &&
     typeof x[1] == 'number';

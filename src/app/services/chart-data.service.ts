@@ -37,7 +37,7 @@ export class ChartDataService { // CHARTDATASERVICE NAME
   }
 
   getOrderBookData(payload: {event: string, channel: string, symbol: string}): Observable<UpdatedValuesFromWs | UpdatedValuesFromWs[]> {
-    let msg = JSON.stringify(payload)  
+    const msg = JSON.stringify(payload)  
     this.ws.sendMessage.next(msg);
     return this.ws.receiveMessage.pipe(
       map(data => JSON.parse(data)), 

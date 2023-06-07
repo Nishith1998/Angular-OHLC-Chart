@@ -35,7 +35,7 @@
                         <div class="text-center">Count</div>
                     </div>
                     <div *ngFor="let index=index;let item of (asksMap | keyvalue) | slice : 0: 19 as data" class="grid grid-cols-4">
-                        <div *ngIf="index != 18" [style.maxWidth]="'250px'" [style.top]="((index * 20)+42) + 'px'" [style.width]="((item.value[INDEX_OF.TOTAL] - minAsk) / (maxAsk - minAsk))*250 + 'px'" class="z-0 absolute h-6 left-4 bg-red-200"></div>
+                        <div *ngIf="index < LAST_INDEX" [style.maxWidth]="'250px'" [style.top]="((index * 20)+42) + 'px'" [style.width]="((item.value[INDEX_OF.TOTAL] - minAsk) / (maxAsk - minAsk))*250 + 'px'" class="z-0 absolute h-6 left-4 bg-red-200"></div>
                         
                         <div class="z-10 text-left">{{item.value[INDEX_OF.PRICE]}}</div>
                         <div class="z-10 text-center">{{calcTotalAsk(index, item.value, data)}}{{item.value[INDEX_OF.TOTAL] | number}}</div>

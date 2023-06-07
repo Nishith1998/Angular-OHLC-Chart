@@ -70,7 +70,6 @@
             "production": {
               "browserTarget": "ohlc:build:production",
               "proxyConfig": "proxy.config.json"
-
             },
             "development": {
               "browserTarget": "ohlc:build:development",
@@ -104,8 +103,22 @@
             ],
             "scripts": []
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
+  },
+  "cli": {
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   }
 }

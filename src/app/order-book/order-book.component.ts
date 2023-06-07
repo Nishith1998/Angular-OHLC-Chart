@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ChartDataService } from '../services/chart-data.service';
 import { INITIAL_PAYLOAD_FOR_ORDERBOOK, QUERY_PARAM_SYMBOL } from '../constants';
 import { OrderBookPayload, UpdatedValuesFromWs, isUpdatedValuesFromWs } from '../models';
@@ -14,7 +14,7 @@ const INITIAL_TOTAL = 0;
   templateUrl: './order-book.component.html',
   styleUrls: ['./order-book.component.scss']
 })
-export class OrderBookComponent implements OnInit {
+export class OrderBookComponent implements OnInit, OnDestroy {
    // move
   bidsMap: Map<number, [number, number, number, number]> = new Map();
   asksMap: Map<number, [number, number, number, number]> = new Map();
@@ -68,7 +68,7 @@ export class OrderBookComponent implements OnInit {
 
   updateBookMap(updatedValue: UpdatedValuesFromWs | UpdatedValuesFromWs[]): void {
     if (isUpdatedValuesFromWs(updatedValue)) {
-      let [price, count, amount] = [...updatedValue];
+      const [price, count, amount] = [...updatedValue];
       if (count != 0) {
         if (amount < 0) {
           this.asksMap.set(price, [count, Math.abs(amount), INITIAL_TOTAL, price]);

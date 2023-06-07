@@ -29,7 +29,7 @@
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row 
-        [ngClass]="{'selected-symbol':selectedSymbol == row.symbol}" 
+        [ngClass]="{'selected-symbol':selectedSymbol === row.symbol}" 
         class="cursor-pointer" 
         (click)="onSymbolSelect(row.symbol)" 
         *matRowDef="let row; columns: displayedColumns"

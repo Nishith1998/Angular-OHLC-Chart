@@ -27,7 +27,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import {OverlayModule} from '@angular/cdk/overlay';
 
 class MyErrorHandler implements ErrorHandler {
-  handleError(error: any) {
+  handleError() {
     // do something with the exception
     // console.log("error:", error)
   }

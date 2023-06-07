@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { ChartDataService } from '../services/chart-data.service';
 import { first } from 'rxjs';
 import { QUERY_PARAM_SYMBOL } from '../constants';

@@ -36,7 +36,7 @@
             <button 
                 *ngFor="let item of timeSpansList" 
                 mat-stroked-button
-                [ngClass]="{'selected-time-span': selectedTimeFrame ? selectedTimeFrame.label == item.label : false}"
+                [ngClass]="{'selected-time-span': selectedTimeFrame ? selectedTimeFrame.label === item.label : false}"
                 (click)="onTimeFrameChange(item)"
             >{{item.label}}
             </button>

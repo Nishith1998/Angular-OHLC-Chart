@@ -33,7 +33,17 @@ export const INITIAL_PAYLOAD_FOR_ORDERBOOK = {
     symbol: 'tBTCUSD'
 };
 
+type ChartGlobalsOption = {
+    globals: {
+        seriesCandleO: number[][];
+        seriesCandleH: number[][];
+        seriesCandleL: number[][];
+        seriesCandleC: number[][];
+    };
+};
+
 export const getChartOptions = function (this: ChartComponent): ChartOptions {
+
     return {
         series: [
             {
@@ -59,7 +69,7 @@ export const getChartOptions = function (this: ChartComponent): ChartOptions {
             type: "datetime",
             tooltip: {
                 formatter: function (val: string) {
-                    let date = new Date(val);
+                    const date = new Date(val);
                     return date.toLocaleString('default', { day: 'numeric', month: 'long', year: 'numeric' }) + ' ' + date.toLocaleTimeString().substring(0, 5);
                 }
             }
@@ -85,7 +95,7 @@ export const getChartOptions = function (this: ChartComponent): ChartOptions {
         tooltip: {
             enabled: true,
             cssClass: "my-tooltip",
-            custom: ({ series, seriesIndex, dataPointIndex, w }: { series: number[][], seriesIndex: number, dataPointIndex: number, w: {config: any, globals: any} }) => {
+            custom: ({ dataPointIndex, w }: { dataPointIndex: number, w: ChartGlobalsOption }) => {
                 this.ohlcOnHover =
                 {
                     o: w.globals.seriesCandleO[0][dataPointIndex],
