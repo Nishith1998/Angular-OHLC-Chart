@@ -88,10 +88,10 @@ export const getChartOptions = function (this: ChartComponent): ChartOptions {
             enabled: true,
             cssClass: "my-tooltip",
             custom: ({ series, seriesIndex, dataPointIndex, w }: { series: number[][], seriesIndex: number, dataPointIndex: number, w: {config: any, globals: any} }) => {
-                console.log("tooltip data: ", series,
-                    seriesIndex,
-                    dataPointIndex,
-                    w)
+                // console.log("tooltip data: ", series,
+                //     seriesIndex,
+                //     dataPointIndex,
+                //     w)
                 this.ohlcOnHover =
                 {
                     o: w.globals.seriesCandleO[0][dataPointIndex],

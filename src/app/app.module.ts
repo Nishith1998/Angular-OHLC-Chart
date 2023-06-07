@@ -22,6 +22,8 @@ import { TablePipe } from './tickers-table/table.pipe';
 import { LoadingComponent } from './loading/loading.component';
 import { LoadingInterceptor } from './services/loading-interceptor';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 import {OverlayModule} from '@angular/cdk/overlay';
 
 class MyErrorHandler implements ErrorHandler {
@@ -57,6 +59,7 @@ class MyErrorHandler implements ErrorHandler {
     MatExpansionModule,
     MatCardModule,
     MatProgressSpinnerModule,
+    MatTooltipModule,
     OverlayModule
   ],
   providers: [    {

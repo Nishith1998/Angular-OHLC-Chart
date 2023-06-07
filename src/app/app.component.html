@@ -3,7 +3,14 @@
     <mat-icon>insights</mat-icon>
   </button>
   <span>Analytics</span>
-  <span class="example-spacer"></span>
+  <span class="mx-auto"></span>
+    <button class="cursor-pointer" mat-icon-button matTooltip="See order book" [routerLink]="'/orderBook'" *ngIf="isHome()">
+      <mat-icon>menu_book</mat-icon>
+    </button>
+
+    <button class="cursor-pointer" mat-icon-button matTooltip="Go to home" [routerLink]="'/home'" *ngIf="!isHome()">
+      <mat-icon>home</mat-icon>
+    </button>
 </mat-toolbar>
 <app-loading></app-loading>
 <router-outlet></router-outlet>
