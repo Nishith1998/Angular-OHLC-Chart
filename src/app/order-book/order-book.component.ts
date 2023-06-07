@@ -1,13 +1,11 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ChartDataService } from '../services/chart-data.service';
-import { INITIAL_PAYLOAD_FOR_ORDERBOOK } from '../constants';
+import { INITIAL_PAYLOAD_FOR_ORDERBOOK, QUERY_PARAM_SYMBOL } from '../constants';
 import { OrderBookPayload, UpdatedValuesFromWs, isUpdatedValuesFromWs } from '../models';
 import { ActivatedRoute, Params } from '@angular/router';
 import { WebsocketService } from '../services/websocket.service';
 import { first } from 'rxjs';
 
-const INDEX_OF_COUNT = 1;
-const INDEX_OF_PRICE = 0;
 const INITIAL_TOTAL = 0;
 
 @Component({
@@ -15,11 +13,21 @@ const INITIAL_TOTAL = 0;
   templateUrl: './order-book.component.html',
   styleUrls: ['./order-book.component.scss']
 })
-export class OrderBookComponent {
+export class OrderBookComponent implements OnInit {
   bidsMap: Map<number, [number, number, number, number]> = new Map();
   asksMap: Map<number, [number, number, number, number]> = new Map();
-  displayedColumns: string[] = ['']
   bookPayload: OrderBookPayload;
+  minBid: number;
+  maxBid: number;
+  minAsk: number;
+  maxAsk: number;
+  readonly INDEX_OF = {
+    COUNT: 0,
+    AMOUNT: 1,
+    TOTAL: 2,
+    PRICE: 3
+  }
+  readonly LAST_INDEX = 18;
 
   constructor(public changeDetectorRef: ChangeDetectorRef, private route: ActivatedRoute, private chartDataService: ChartDataService, private ws: WebsocketService) {
     this.ws.setConnection();
@@ -27,51 +35,51 @@ export class OrderBookComponent {
 
   ngOnInit() {
     this.bookPayload = INITIAL_PAYLOAD_FOR_ORDERBOOK;
-    this.route.queryParams.pipe(first()).subscribe((params: Params) => {
-      if (params['symbol']) {
-        this.chartDataService.selectedSymbol.next(params['symbol']);
+    this.route.queryParams.pipe(first()).subscribe((params: Params): void => {
+      if (params[QUERY_PARAM_SYMBOL]) {
+        this.chartDataService.selectedSymbol.next(params[QUERY_PARAM_SYMBOL]);
       }
     })
 
     // On Select OrdbookApi Call implmentation
-    this.chartDataService.selectedSymbol.subscribe((selectedValue: string) => {
-      if(selectedValue) {
+    this.chartDataService.selectedSymbol.subscribe((selectedValue: string): void => {
+      if (selectedValue) {
         this.onSymbolChange(selectedValue);
       }
     })
   }
 
-  onSymbolChange(value: string) {
-      this.asksMap.clear();
-      this.bidsMap.clear();
-      this.changeDetectorRef.detectChanges();
+  onSymbolChange(symbolValue: string): void {
+    this.asksMap.clear();
+    this.bidsMap.clear();
+    this.changeDetectorRef.detectChanges();
 
-    this.bookPayload.symbol = value;
+    this.bookPayload.symbol = symbolValue;
     this.callOrderBookAPI();
   }
 
-  callOrderBookAPI() {
-    this.chartDataService.getOrderBookData(this.bookPayload).subscribe(data => {
+  callOrderBookAPI(): void {
+    this.chartDataService.getOrderBookData(this.bookPayload).subscribe((data: UpdatedValuesFromWs | UpdatedValuesFromWs[]) => {
       this.updateBookMap(data);
     })
   }
 
-  updateBookMap(updatedValue: UpdatedValuesFromWs | UpdatedValuesFromWs[]) {
+  updateBookMap(updatedValue: UpdatedValuesFromWs | UpdatedValuesFromWs[]): void {
     if (isUpdatedValuesFromWs(updatedValue)) {
-      let [price,count, amount] = [...updatedValue];
-      if (updatedValue[INDEX_OF_COUNT] != 0) {
-        if(updatedValue[2] < 0) {
+      let [price, count, amount] = [...updatedValue];
+      if (count != 0) {
+        if (amount < 0) {
           this.asksMap.set(price, [count, Math.abs(amount), INITIAL_TOTAL, price]);
         } else {
           this.bidsMap.set(price, [count, Math.abs(amount), INITIAL_TOTAL, price]);
         }
       } else {
-        this.asksMap.delete(updatedValue[INDEX_OF_PRICE]);
-        this.bidsMap.delete(updatedValue[INDEX_OF_PRICE]);
+        this.asksMap.delete(price);
+        this.bidsMap.delete(price);
       }
     } else if (updatedValue && typeof updatedValue[1] != 'string') {
-      updatedValue.forEach(([price, count, amount]: [price:number, count:number, amount:number]) => {
-        if(amount < 0) {
+      updatedValue.forEach(([price, count, amount]: [price: number, count: number, amount: number]) => {
+        if (amount < 0) {
           this.asksMap.set(price, [count, Math.abs(amount), INITIAL_TOTAL, price]);
         } else { // amount > 0
           this.bidsMap.set(price, [count, amount, INITIAL_TOTAL, price])
@@ -80,31 +88,25 @@ export class OrderBookComponent {
     }
   }
 
-  minBid: number;
-  maxBid: number;
-  calcTotalBid(index: number, itemValue: any[], list: any[]) {
-
-    if(index == 0) {
-      this.minBid = itemValue[1];
-      itemValue[2] = itemValue[1];
+  calcTotalBid(index: number, itemValue: any[], list: any[]): void {
+    if (index == 0) {
+      this.minBid = itemValue[this.INDEX_OF.AMOUNT];
+      itemValue[this.INDEX_OF.TOTAL] = itemValue[this.INDEX_OF.AMOUNT];
     } else {
-      itemValue[2] = list[index-1].value[2] + itemValue[1];
-      if(index == 18)
-        this.maxBid = itemValue[2];
+      itemValue[this.INDEX_OF.TOTAL] = list[index - 1].value[this.INDEX_OF.TOTAL] + itemValue[this.INDEX_OF.AMOUNT];
+      if (index == this.LAST_INDEX)
+        this.maxBid = itemValue[this.INDEX_OF.TOTAL];
     }
   }
 
-  minAsk: number;
-  maxAsk: number;
-  calcTotalAsk(index: number, itemValue: any[], list: any[]) {
-
-    if(index == 0) {
-      this.minAsk = itemValue[1];
-      itemValue[2] = itemValue[1];
+  calcTotalAsk(index: number, itemValue: any[], list: any[]): void {
+    if (index == 0) {
+      this.minAsk = itemValue[this.INDEX_OF.AMOUNT];
+      itemValue[this.INDEX_OF.TOTAL] = itemValue[this.INDEX_OF.AMOUNT];
     } else {
-      itemValue[2] = list[index-1].value[2] + itemValue[1];
-      if(index == 18)
-        this.maxAsk = itemValue[2];
+      itemValue[this.INDEX_OF.TOTAL] = list[index - 1].value[this.INDEX_OF.TOTAL] + itemValue[this.INDEX_OF.AMOUNT];
+      if (index == this.LAST_INDEX)
+        this.maxAsk = itemValue[this.INDEX_OF.TOTAL];
     }
   }
 

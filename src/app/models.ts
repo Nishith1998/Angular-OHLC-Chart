@@ -33,6 +33,7 @@ export class TableDataType {
         options.forEach(ele => {
             let key = ele[INDEX_OF_SYMBOL].substring(1,4);
             if(dataMap.has(key)) {
+                if(ele[INDEX_OF_SYMBOL].length > 4)
                 dataMap.get(key).push({symbol: ele[INDEX_OF_SYMBOL], lastPrice: ele[INDEX_OF_LASTPRICE], symbolValue: ''})
             } else {
                 // dataMap.set(key, [])

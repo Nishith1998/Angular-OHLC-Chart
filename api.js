@@ -2,7 +2,7 @@ var express = require('express'); var server = express();
 // var router = express.Router();
 const axios = require('axios');
 
-server.set('port', 3000);
+server.set('port', 9000);
 // Serve static directory where our angular app is located.
 server.use(express.static(__dirname + '/dist/ohlc'));
 

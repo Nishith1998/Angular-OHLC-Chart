@@ -2,8 +2,14 @@ import { ChartComponent } from "./chart/chart.component";
 import { ChartOptions, TimeFrame } from "./models";
 
 export const URLs = {
-    getCandles: 'api/getCandles', // 'https://api-pub.bitfinex.com/v2/candles/trade%3A',
-    getAllSymbols: 'api/getAllSymbols' // 'https://api-pub.bitfinex.com/v2/tickers?symbols=ALL'
+    getCandles: 'api/getCandles',
+    getAllSymbols: 'api/getAllSymbols',
+    getOrderBook: 'wss://api-pub.bitfinex.com/ws/2'
+}
+
+export const ANGULAR_ROUTES = {
+    HOME: '/home',
+    ORDERBOOK: '/orderBook'
 }
 
 export const timeSpansList: TimeFrame[] = [
@@ -17,7 +23,8 @@ export const timeSpansList: TimeFrame[] = [
     { label: '6h', value: '5m' },
     { label: '1h', value: '1m' },
 ];
-
+export const CHART_SERIES_NAME = 'candle';
+export const QUERY_PARAM_SYMBOL = 'symbol';
 export const INITIAL_INDEX_FOR_CHART = 0;
 export const INITIAL_TIME_FRAME_FOR_CHART = '1m';
 export const INITIAL_PAYLOAD_FOR_ORDERBOOK = {
@@ -30,14 +37,14 @@ export const getChartOptions = function (this: ChartComponent): ChartOptions {
     return {
         series: [
             {
-              name: "My-series",
+              name: CHART_SERIES_NAME,
               data: this.chartData
             }
           ],
         chart: {
             events: {
                 zoomed: () => {
-                    this.selectedTimeSpan = null;
+                    this.selectedTimeFrame = null;
                     // console.log("zoomed", chartContext, xaxis, yaxis);
                 }
             },
@@ -61,7 +68,7 @@ export const getChartOptions = function (this: ChartComponent): ChartOptions {
         },
         yaxis: {
             labels: {
-                formatter: function (val, index) {
+                formatter: function (val: number) {
                     return val.toFixed(2);
                 }
             }

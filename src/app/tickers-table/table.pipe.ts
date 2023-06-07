@@ -5,14 +5,16 @@ import { TableDataType } from '../models';
   name: 'table'
 })
 export class TablePipe implements PipeTransform {
+  readonly SUBSTRING_MIN_INDEX = 1;
+  readonly SUBSTRING_MAX_INDEX = 4;
 
   transform(value: TableDataType, type: string): string {
     if(type == 'name')
-      return value.symbolValue.substring(1,4);
+      return value.symbolValue.substring(this.SUBSTRING_MIN_INDEX,this.SUBSTRING_MAX_INDEX);
     else if( type == 'unit')
-      return value.symbol.substring(4,).replace(':', '').replace('F0', '').replace('F0', '');
+      return value.symbol.substring(this.SUBSTRING_MAX_INDEX,).replace(':', '').replace('F0', '').replace('F0', '');
     else
-      return ''
+      return '';
   }
 
 }

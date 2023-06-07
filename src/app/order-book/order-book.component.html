@@ -13,34 +13,34 @@
                         <div class="text-center">Count</div>
                         <div class="text-center">Amount</div>
                         <div class="text-center">Total</div>
-                        <div class="text-center">Price</div>
+                        <div class="text-right">Price</div>
                     </div>
                     <div *ngFor="let index=index;let item of (bidsMap | keyvalue).reverse()| slice : 0: 19 as data" class="grid grid-cols-4">
-                        <div *ngIf="index != 18" [style.maxWidth]="'250px'" [style.top]="((index * 20)+42) + 'px'" [style.width]="((item.value[2] - minBid) / (maxBid - minBid))*250 + 'px'" class="z-0 absolute h-6 right-4 bg-green-200"></div>
-                        <div class="z-10 text-center">{{item.value[0]  | number}}</div>
-                        <div class="z-10 text-center">{{item.value[1] | number}}</div>
+                        <div *ngIf="index < LAST_INDEX" [style.maxWidth]="'250px'" [style.top]="((index * 20)+42) + 'px'" [style.width]="((item.value[INDEX_OF.TOTAL] - minBid) / (maxBid - minBid))*250 + 'px'" class="z-0 absolute h-6 right-4 bg-green-200"></div>
+                        <div class="z-10 text-center">{{item.value[INDEX_OF.COUNT]  | number}}</div>
+                        <div class="z-10 text-center">{{item.value[INDEX_OF.AMOUNT] | number}}</div>
                         <div class="z-10 text-center">
-                            {{calcTotalBid(index, item.value, data)}}{{item.value[2] | number}}
+                            {{calcTotalBid(index, item.value, data)}}{{item.value[INDEX_OF.TOTAL] | number}}
                         </div>
-                        <div class="z-10 text-center">{{item.value[3]}}</div>
+                        <div class="z-10 text-right">{{item.value[INDEX_OF.PRICE]}}</div>
                     </div>
                 </div>
             </mat-card>
             <mat-card>
                 <div class="flex flex-col m-4 h-96 overflow-y-hidden">
                     <div class="grid grid-cols-4 text-lg">
-                        <div class="text-center">Price</div>
+                        <div class="text-left">Price</div>
                         <div class="text-center">Total</div>
                         <div class="text-center">Amount</div>
                         <div class="text-center">Count</div>
                     </div>
                     <div *ngFor="let index=index;let item of (asksMap | keyvalue).reverse() | slice : 0: 19 as data" class="grid grid-cols-4">
-                        <div *ngIf="index != 18" [style.maxWidth]="'250px'" [style.top]="((index * 20)+42) + 'px'" [style.width]="((item.value[2] - minAsk) / (maxAsk - minAsk))*250 + 'px'" class="z-0 absolute h-6 left-4 bg-red-200"></div>
+                        <div *ngIf="index != 18" [style.maxWidth]="'250px'" [style.top]="((index * 20)+42) + 'px'" [style.width]="((item.value[INDEX_OF.TOTAL] - minAsk) / (maxAsk - minAsk))*250 + 'px'" class="z-0 absolute h-6 left-4 bg-red-200"></div>
                         
-                        <div class="z-10 text-left">{{item.value[3]}}</div>
-                        <div class="z-10 text-center">{{calcTotalAsk(index, item.value, data)}}{{item.value[2] | number}}</div>
-                        <div class="z-10 text-center">{{item.value[1] | number}}</div>
-                        <div class="z-10 text-center">{{item.value[0] | number}}</div>
+                        <div class="z-10 text-left">{{item.value[INDEX_OF.PRICE]}}</div>
+                        <div class="z-10 text-center">{{calcTotalAsk(index, item.value, data)}}{{item.value[INDEX_OF.TOTAL] | number}}</div>
+                        <div class="z-10 text-center">{{item.value[INDEX_OF.AMOUNT] | number}}</div>
+                        <div class="z-10 text-center">{{item.value[INDEX_OF.COUNT] | number}}</div>
                     </div>
                 </div>
             </mat-card>

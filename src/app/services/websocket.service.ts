@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { URLs } from '../constants';
 
 @Injectable({
   providedIn: 'root'
@@ -14,15 +15,15 @@ export class WebsocketService {
 
   constructor() { 
     
-    this.sendMessage.subscribe((msg: string) => {
+    this.sendMessage.subscribe((msg: string): void => {
       if(this.connectionOpened && this.ws.readyState == 1) {
         // console.log("sending message")
         this.ws.send(msg);
       } 
       else {
-        console.log("Connection not opened yet...")
-        this.ws.onopen = () => {
-          // console.log("connectionOpened")
+        // console.log("Connection not opened yet...")
+        this.ws.onopen = (): void => {
+          // console.log("connection opened now")
           this.connectionOpened = true;
           this.ws.send(msg);
         };
@@ -33,12 +34,12 @@ export class WebsocketService {
   }
 
   setConnection() {
-    this.ws = new WebSocket("wss://api-pub.bitfinex.com/ws/2");
-    this.ws.onmessage = (event) => {
+    this.ws = new WebSocket(URLs.getOrderBook);
+    this.ws.onmessage = (event: MessageEvent<string>): void => {
       this.receiveMessage.next(event.data);
       // console.log("websocket recieved data: ",event.data);
     };
-    this.ws.onopen = () => {
+    this.ws.onopen = (): void => {
       console.log("connectionOpened")
       this.connectionOpened = true;
     };
