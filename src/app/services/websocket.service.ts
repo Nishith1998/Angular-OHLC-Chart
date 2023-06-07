@@ -16,7 +16,7 @@ export class WebsocketService {
   constructor() { 
     
     this.sendMessage.subscribe((msg: string): void => {
-      if(this.connectionOpened && this.ws.readyState == 1) {
+      if(this.connectionOpened && this.ws.readyState === 1) { // 
         // console.log("sending message")
         this.ws.send(msg);
       } 

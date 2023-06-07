@@ -1,5 +1,6 @@
 <div class="text-lg">Tickers Table</div>
-<mat-table mat-table [dataSource]="getAllSymbols$" class="data-table mat-elevation-z8">
+<ng-container *ngIf="getAllSymbols$ | async as tickersTableData">
+<mat-table mat-table [dataSource]="tickersTableData" class="data-table mat-elevation-z8">
 
     <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
@@ -43,3 +44,4 @@
   </ng-container>
     <mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup"> </mat-row> -->
 </mat-table>
+</ng-container>

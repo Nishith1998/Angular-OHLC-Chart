@@ -5,6 +5,7 @@ import { OrderBookPayload, UpdatedValuesFromWs, isUpdatedValuesFromWs } from '..
 import { ActivatedRoute, Params } from '@angular/router';
 import { WebsocketService } from '../services/websocket.service';
 import { first } from 'rxjs';
+import { KeyValue } from '@angular/common';
 
 const INITIAL_TOTAL = 0;
 
@@ -14,6 +15,7 @@ const INITIAL_TOTAL = 0;
   styleUrls: ['./order-book.component.scss']
 })
 export class OrderBookComponent implements OnInit {
+   // move
   bidsMap: Map<number, [number, number, number, number]> = new Map();
   asksMap: Map<number, [number, number, number, number]> = new Map();
   bookPayload: OrderBookPayload;
@@ -77,7 +79,7 @@ export class OrderBookComponent implements OnInit {
         this.asksMap.delete(price);
         this.bidsMap.delete(price);
       }
-    } else if (updatedValue && typeof updatedValue[1] != 'string') {
+    } else if (updatedValue && typeof updatedValue[1] != 'string') { // do not type check
       updatedValue.forEach(([price, count, amount]: [price: number, count: number, amount: number]) => {
         if (amount < 0) {
           this.asksMap.set(price, [count, Math.abs(amount), INITIAL_TOTAL, price]);
@@ -88,7 +90,7 @@ export class OrderBookComponent implements OnInit {
     }
   }
 
-  calcTotalBid(index: number, itemValue: any[], list: any[]): void {
+  calcTotalBid(index: number, itemValue: [number, number, number, number], list: KeyValue<number, [number, number, number, number]>[]): void {
     if (index == 0) {
       this.minBid = itemValue[this.INDEX_OF.AMOUNT];
       itemValue[this.INDEX_OF.TOTAL] = itemValue[this.INDEX_OF.AMOUNT];
@@ -99,7 +101,7 @@ export class OrderBookComponent implements OnInit {
     }
   }
 
-  calcTotalAsk(index: number, itemValue: any[], list: any[]): void {
+  calcTotalAsk(index: number, itemValue: [number, number, number, number], list: KeyValue<number, [number, number, number, number]>[]): void {
     if (index == 0) {
       this.minAsk = itemValue[this.INDEX_OF.AMOUNT];
       itemValue[this.INDEX_OF.TOTAL] = itemValue[this.INDEX_OF.AMOUNT];

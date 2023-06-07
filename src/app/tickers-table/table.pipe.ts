@@ -10,9 +10,9 @@ export class TablePipe implements PipeTransform {
 
   transform(value: TableDataType, type: string): string {
     if(type == 'name')
-      return value.symbolValue.substring(this.SUBSTRING_MIN_INDEX,this.SUBSTRING_MAX_INDEX);
+      return value.symbol.substring(this.SUBSTRING_MIN_INDEX,this.SUBSTRING_MAX_INDEX);
     else if( type == 'unit')
-      return value.symbol.substring(this.SUBSTRING_MAX_INDEX,).replace(':', '').replace('F0', '').replace('F0', '');
+      return value.unit//.symbol.substring(this.SUBSTRING_MAX_INDEX,).replace(':', '').replace('F0', '').replace('F0', '');
     else
       return '';
   }

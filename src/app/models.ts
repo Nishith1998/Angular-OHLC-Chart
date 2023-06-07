@@ -25,26 +25,29 @@ const INDEX_OF_LOWVALUE = 4;
 export class TableDataType {
     symbol: string;
     lastPrice?: number;
-    isGroupBy?: boolean;
-    symbolValue: string;
+    unit: string;
+    // symbolValue: string; // remove
+
+    // format is wrong, from and to
+    // tableDataType name is general
 
     static mapToTableDataType(options: GetAllSymbolsResp[]): TableDataType[] {
-        let dataMap = new Map();
+        const tickersdataMap = new Map(); // const for ansArr, name for dataMap & ansArr
         options.forEach(ele => {
-            let key = ele[INDEX_OF_SYMBOL].substring(1,4);
-            if(dataMap.has(key)) {
+            const key = ele[INDEX_OF_SYMBOL].substring(1,4);
+            const unit = ele[INDEX_OF_SYMBOL].substring(4,).replace(':', '').replace('F0', '').replace('F0', '')
+            if(tickersdataMap.has(key)) {
                 if(ele[INDEX_OF_SYMBOL].length > 4)
-                dataMap.get(key).push({symbol: ele[INDEX_OF_SYMBOL], lastPrice: ele[INDEX_OF_LASTPRICE], symbolValue: ''})
+                tickersdataMap.get(key).push({symbol: ele[INDEX_OF_SYMBOL], lastPrice: ele[INDEX_OF_LASTPRICE], unit: unit})
             } else {
-                // dataMap.set(key, [])
-                dataMap.set(key, [{symbol: ele[INDEX_OF_SYMBOL], lastPrice: ele[INDEX_OF_LASTPRICE], symbolValue: ele[INDEX_OF_SYMBOL]}])
+                tickersdataMap.set(key, [{symbol: ele[INDEX_OF_SYMBOL], lastPrice: ele[INDEX_OF_LASTPRICE], unit: unit}])
             }
         });
-        let ansArr: TableDataType[] = [];
-        dataMap.forEach(ele => {
-            ansArr.push(...ele)
+        const tickerTableMergedArr: TableDataType[] = [];
+        tickersdataMap.forEach(ele => {
+            tickerTableMergedArr.push(...ele)
         })
-        return ansArr;
+        return tickerTableMergedArr;
         // return options.map((ele: GetAllSymbolsResp) => {
         //     return { symbol: ele[INDEX_OF_SYMBOL], lastPrice: ele[INDEX_OF_LASTPRICE] }
         // });

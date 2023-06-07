@@ -10,7 +10,7 @@ const INDEX_OF_ORDERBOOK_ARRAY = 1;
 @Injectable({
   providedIn: 'root'
 })
-export class ChartDataService {
+export class ChartDataService { // CHARTDATASERVICE NAME
 
   selectedSymbol: Subject<string> = new Subject();
   selectedSymbolValue: string;
@@ -20,7 +20,7 @@ export class ChartDataService {
   }
 
   getCandles(payload: ChartPayload): Observable<ChartDataType[]> {
-    return this.http.post<getCandleResp>(URLs.getCandles, payload)
+    return this.http.post<getCandleResp>(URLs.getCandles, payload) // get call should be there: query param
     .pipe(
       map((candleData: getCandleResp) => {
         return candleMapping(candleData);

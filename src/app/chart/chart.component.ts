@@ -5,7 +5,7 @@ import { CHART_SERIES_NAME, INITIAL_TIME_FRAME_FOR_CHART, getChartOptions, timeS
 import { ChartDataType, ChartOptions, ChartPayload, TimeFrame } from '../models';
 
 @Component({
-  selector: 'app-chart',
+  selector: 'ohlc-chart',
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.scss']
 })
