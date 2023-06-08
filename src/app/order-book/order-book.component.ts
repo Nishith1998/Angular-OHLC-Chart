@@ -1,11 +1,11 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { ChartDataService } from '../services/chart-data.service';
+import { ApiDataService } from '../services/api-data.service';
 import { INITIAL_PAYLOAD_FOR_ORDERBOOK, QUERY_PARAM_SYMBOL } from '../constants';
 import { OrderBookPayload, UpdatedValuesFromWs, isUpdatedValuesFromWs } from '../models';
 import { ActivatedRoute, Params } from '@angular/router';
 import { WebsocketService } from '../services/websocket.service';
 import { first } from 'rxjs';
-import { KeyValue } from '@angular/common';
+import { OrderBookService } from './order-book.service';
 
 const INITIAL_TOTAL = 0;
 
@@ -18,11 +18,11 @@ export class OrderBookComponent implements OnInit, OnDestroy {
    // move
   bidsMap: Map<number, [number, number, number, number]> = new Map();
   asksMap: Map<number, [number, number, number, number]> = new Map();
+  minBid: number; maxBid: number; 
+  minAsk: number; maxAsk: number;
+
   bookPayload: OrderBookPayload;
-  minBid: number;
-  maxBid: number;
-  minAsk: number;
-  maxAsk: number;
+
   readonly INDEX_OF = {
     COUNT: 0,
     AMOUNT: 1,
@@ -31,7 +31,7 @@ export class OrderBookComponent implements OnInit, OnDestroy {
   }
   readonly LAST_INDEX = 18;
 
-  constructor(public changeDetectorRef: ChangeDetectorRef, private route: ActivatedRoute, private chartDataService: ChartDataService, private ws: WebsocketService) {
+  constructor(public orderBookService: OrderBookService,public changeDetectorRef: ChangeDetectorRef, private route: ActivatedRoute, private apiDataService: ApiDataService, private ws: WebsocketService) {
     this.ws.setConnection();
   }
 
@@ -39,12 +39,11 @@ export class OrderBookComponent implements OnInit, OnDestroy {
     this.bookPayload = INITIAL_PAYLOAD_FOR_ORDERBOOK;
     this.route.queryParams.pipe(first()).subscribe((params: Params): void => {
       if (params[QUERY_PARAM_SYMBOL]) {
-        this.chartDataService.selectedSymbol.next(params[QUERY_PARAM_SYMBOL]);
+        this.apiDataService.selectedSymbol.next(params[QUERY_PARAM_SYMBOL]);
       }
     })
 
-    // On Select OrdbookApi Call implmentation
-    this.chartDataService.selectedSymbol.subscribe((selectedValue: string): void => {
+    this.apiDataService.selectedSymbol.subscribe((selectedValue: string): void => {
       if (selectedValue) {
         this.onSymbolChange(selectedValue);
       }
@@ -61,7 +60,7 @@ export class OrderBookComponent implements OnInit, OnDestroy {
   }
 
   callOrderBookAPI(): void {
-    this.chartDataService.getOrderBookData(this.bookPayload).subscribe((data: UpdatedValuesFromWs | UpdatedValuesFromWs[]) => {
+    this.apiDataService.getOrderBookData(this.bookPayload).subscribe((data: UpdatedValuesFromWs | UpdatedValuesFromWs[]) => {
       this.updateBookMap(data);
     })
   }
@@ -79,36 +78,14 @@ export class OrderBookComponent implements OnInit, OnDestroy {
         this.asksMap.delete(price);
         this.bidsMap.delete(price);
       }
-    } else if (updatedValue && typeof updatedValue[1] != 'string') { // do not type check
+    } else if (updatedValue) { // do not type check
       updatedValue.forEach(([price, count, amount]: [price: number, count: number, amount: number]) => {
         if (amount < 0) {
           this.asksMap.set(price, [count, Math.abs(amount), INITIAL_TOTAL, price]);
-        } else { // amount > 0
+        } else {
           this.bidsMap.set(price, [count, amount, INITIAL_TOTAL, price])
         }
       });
-    }
-  }
-
-  calcTotalBid(index: number, itemValue: [number, number, number, number], list: KeyValue<number, [number, number, number, number]>[]): void {
-    if (index == 0) {
-      this.minBid = itemValue[this.INDEX_OF.AMOUNT];
-      itemValue[this.INDEX_OF.TOTAL] = itemValue[this.INDEX_OF.AMOUNT];
-    } else {
-      itemValue[this.INDEX_OF.TOTAL] = list[index - 1].value[this.INDEX_OF.TOTAL] + itemValue[this.INDEX_OF.AMOUNT];
-      if (index == this.LAST_INDEX)
-        this.maxBid = itemValue[this.INDEX_OF.TOTAL];
-    }
-  }
-
-  calcTotalAsk(index: number, itemValue: [number, number, number, number], list: KeyValue<number, [number, number, number, number]>[]): void {
-    if (index == 0) {
-      this.minAsk = itemValue[this.INDEX_OF.AMOUNT];
-      itemValue[this.INDEX_OF.TOTAL] = itemValue[this.INDEX_OF.AMOUNT];
-    } else {
-      itemValue[this.INDEX_OF.TOTAL] = list[index - 1].value[this.INDEX_OF.TOTAL] + itemValue[this.INDEX_OF.AMOUNT];
-      if (index == this.LAST_INDEX)
-        this.maxAsk = itemValue[this.INDEX_OF.TOTAL];
     }
   }
 

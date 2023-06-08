@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { WebsocketService } from './websocket.service';
 import { Observable, Subject, map, skipWhile } from 'rxjs';
-import { ChartDataType, ChartPayload, GetAllSymbolsResp, TableDataType, UpdatedValuesFromWs, candleMapping, getCandleResp } from '../models';
+import { ChartDataType, ChartPayload, GetAllSymbolsResp, TickersTableDataType, UpdatedValuesFromWs, candleMapping, getCandleResp } from '../models';
 import { URLs } from '../constants';
 
 const INDEX_OF_ORDERBOOK_ARRAY = 1;
@@ -10,7 +10,7 @@ const INDEX_OF_ORDERBOOK_ARRAY = 1;
 @Injectable({
   providedIn: 'root'
 })
-export class ChartDataService { // CHARTDATASERVICE NAME
+export class ApiDataService {
 
   selectedSymbol: Subject<string> = new Subject();
   selectedSymbolValue: string;
@@ -20,7 +20,7 @@ export class ChartDataService { // CHARTDATASERVICE NAME
   }
 
   getCandles(payload: ChartPayload): Observable<ChartDataType[]> {
-    return this.http.post<getCandleResp>(URLs.getCandles, payload) // get call should be there: query param
+    return this.http.get<getCandleResp>(URLs.getCandles + '?timeFrame=' + payload.timeFrame + "&symbol=" + payload.symbol)
     .pipe(
       map((candleData: getCandleResp) => {
         return candleMapping(candleData);
@@ -28,10 +28,10 @@ export class ChartDataService { // CHARTDATASERVICE NAME
     );
   }
 
-  getAllSymbols(): Observable<TableDataType[]> {
+  getAllSymbols(): Observable<TickersTableDataType[]> {
     return this.http.get<GetAllSymbolsResp[]>(URLs.getAllSymbols).pipe(
       map((sybmolData: GetAllSymbolsResp[]) => {
-        return TableDataType.mapToTableDataType(sybmolData);
+        return TickersTableDataType.mapToTickersTableDataType(sybmolData);
       })
     )
   }

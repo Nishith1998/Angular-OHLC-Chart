@@ -6,7 +6,7 @@
         <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
         <mat-cell *matCellDef="let element;let i = index"> 
             {{
-                i == 0 || (element.tickerName !== tickersTableData[i-1].tickerName ) ?
+                i === 0 || (element.tickerName !== tickersTableData[i-1].tickerName ) ?
                 element.tickerName : 
                 ''
             }} 
@@ -17,8 +17,8 @@
         <mat-header-cell *matHeaderCellDef> Last </mat-header-cell>
         <mat-cell *matCellDef="let element"> 
             <div class="flex gap-2">
-            <span>{{element.lastPrice}}</span>
-            <span class="text-sm font-bold">{{element.unit}}</span>
+            <span>{{element.tickerLastPrice}}</span>
+            <span class="text-sm font-bold">{{element.tickerUnit}}</span>
             </div>
         </mat-cell>
     </ng-container>
@@ -35,19 +35,11 @@
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row 
-        [ngClass]="{'selected-symbol':selectedSymbol === row.symbol}" 
+        [ngClass]="{'selected-symbol':selectedSymbol === row.tickerSymbol}" 
         class="cursor-pointer" 
-        (click)="onSymbolSelect(row.symbol)" 
+        (click)="onSymbolSelect(row.tickerSymbol)" 
         *matRowDef="let row; columns: displayedColumns"
     ></mat-row>
-
-    <!-- <ng-container matColumnDef="groupHeader">
-		<mat-cell colspan="999" *matCellDef="let group">
-      <mat-icon *ngIf="group.expanded">expand_less</mat-icon>
-      <mat-icon *ngIf="!group.expanded">expand_more</mat-icon>
-			<strong>{{group.symbol}} ({{group.totalCounts}})</strong>
-      </mat-cell>
-  </ng-container>
-    <mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup"> </mat-row> -->
+    
 </mat-table>
 </ng-container>

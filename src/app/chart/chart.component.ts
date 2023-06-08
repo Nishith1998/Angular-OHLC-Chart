@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { ChartDataService } from '../services/chart-data.service';
+import { ApiDataService } from '../services/api-data.service';
 import { first } from 'rxjs';
 import { CHART_SERIES_NAME, INITIAL_TIME_FRAME_FOR_CHART, getChartOptions, timeSpansList } from '../constants';
 import { ChartDataType, ChartOptions, ChartPayload, TimeFrame } from '../models';
@@ -19,7 +19,7 @@ export class ChartComponent implements OnInit {
   selectedTimeFrame: TimeFrame | null;
   selectedSymbol: string;
 
-  constructor(public changeDetectorRef: ChangeDetectorRef, private chartDataService: ChartDataService) { }
+  constructor(public changeDetectorRef: ChangeDetectorRef, private apiDataService: ApiDataService) { }
 
   ngOnInit() {
     this.chartOptions = getChartOptions.apply(this);
@@ -29,7 +29,7 @@ export class ChartComponent implements OnInit {
       timeFrame: INITIAL_TIME_FRAME_FOR_CHART
     };
 
-    this.chartDataService.selectedSymbol.subscribe((selectedValue: string): void => {
+    this.apiDataService.selectedSymbol.subscribe((selectedValue: string): void => {
       this.onSymbolChange(selectedValue);
     })
   }
@@ -47,7 +47,7 @@ export class ChartComponent implements OnInit {
   }
 
   callCandleAPI(): void {
-    this.chartDataService.getCandles(this.candlePayload).pipe(first()).subscribe({
+    this.apiDataService.getCandles(this.candlePayload).pipe(first()).subscribe({
       next: (data: ChartDataType[]) => {
         this.updateChartOptions(data);
       }

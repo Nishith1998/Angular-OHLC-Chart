@@ -13,8 +13,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { TickersTableComponent } from './tickers-table/tickers-table.component';
 import { OrderBookComponent } from './order-book/order-book.component';
 import { LayoutComponent } from './layout/layout.component';
@@ -23,7 +23,7 @@ import { LoadingInterceptor } from './services/loading-interceptor';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import {OverlayModule} from '@angular/cdk/overlay';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 class MyErrorHandler implements ErrorHandler {
   handleError() {
@@ -60,10 +60,10 @@ class MyErrorHandler implements ErrorHandler {
     MatTooltipModule,
     OverlayModule
   ],
-  providers: [    {
+  providers: [{
     provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true
   },
-  {provide: ErrorHandler, useClass: MyErrorHandler}],
+  { provide: ErrorHandler, useClass: MyErrorHandler }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

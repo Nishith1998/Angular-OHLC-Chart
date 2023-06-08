@@ -21,37 +21,32 @@ const INDEX_OF_OPENVALUE = 1;
 const INDEX_OF_HIGHVALUE = 2;
 const INDEX_OF_CLOSEVALUE = 3;
 const INDEX_OF_LOWVALUE = 4;
+const SYMBOL_SUBSTRING_MIN_INDEX = 1;
+const SYMBOL_SUBSTRING_MAX_INDEX = 4;
 
-export class TableDataType {
-    symbol: string;
+export class TickersTableDataType {
+    tickerSymbol: string;
     tickerName: string;
-    lastPrice?: number;
-    unit: string;
-    // symbolValue: string; // remove
+    tickerUnit: string;
+    tickerLastPrice: number;
 
-    // format is wrong, from and to
-    // tableDataType name is general
-
-    static mapToTableDataType(options: GetAllSymbolsResp[]): TableDataType[] {
-        const tickersdataMap = new Map(); // const for ansArr, name for dataMap & ansArr
+    static mapToTickersTableDataType(options: GetAllSymbolsResp[]): TickersTableDataType[] {
+        const tickersdataMap: Map<string, TickersTableDataType[]> = new Map();
         options.forEach(ele => {
-            const key = ele[INDEX_OF_SYMBOL].substring(1,4);
-            const unit = ele[INDEX_OF_SYMBOL].substring(4,).replace(':', '').replace('F0', '').replace('F0', '')
-            if(tickersdataMap.has(key)) {
-                if(ele[INDEX_OF_SYMBOL].length > 4)
-                tickersdataMap.get(key).push({symbol: ele[INDEX_OF_SYMBOL], lastPrice: ele[INDEX_OF_LASTPRICE], unit: unit, tickerName: key})
+            const key = ele[INDEX_OF_SYMBOL].substring(SYMBOL_SUBSTRING_MIN_INDEX, SYMBOL_SUBSTRING_MAX_INDEX);
+            const unit = ele[INDEX_OF_SYMBOL].substring(SYMBOL_SUBSTRING_MAX_INDEX,).replace(':', '').replace('F0', '').replace('F0', '')
+            if (tickersdataMap.has(key)) {
+                if (ele[INDEX_OF_SYMBOL].length > SYMBOL_SUBSTRING_MAX_INDEX)
+                    tickersdataMap.get(key)?.push({ tickerSymbol: ele[INDEX_OF_SYMBOL], tickerLastPrice: ele[INDEX_OF_LASTPRICE], tickerUnit: unit, tickerName: key })
             } else {
-                tickersdataMap.set(key, [{symbol: ele[INDEX_OF_SYMBOL], lastPrice: ele[INDEX_OF_LASTPRICE], unit: unit, tickerName: key}])
+                tickersdataMap.set(key, [{ tickerSymbol: ele[INDEX_OF_SYMBOL], tickerLastPrice: ele[INDEX_OF_LASTPRICE], tickerUnit: unit, tickerName: key }])
             }
         });
-        const tickerTableMergedArr: TableDataType[] = [];
+        const tickerTableMergedArr: TickersTableDataType[] = [];
         tickersdataMap.forEach(ele => {
             tickerTableMergedArr.push(...ele)
         })
         return tickerTableMergedArr;
-        // return options.map((ele: GetAllSymbolsResp) => {
-        //     return { symbol: ele[INDEX_OF_SYMBOL], lastPrice: ele[INDEX_OF_LASTPRICE] }
-        // });
 
     }
 }
@@ -89,9 +84,9 @@ export const candleMapping = (data: getCandleResp): ChartDataType[] => {
         return {
             x: ele[INDEX_OF_EPOCHTIME],
             y: [
-                ele[INDEX_OF_OPENVALUE], 
-                ele[INDEX_OF_HIGHVALUE], 
-                ele[INDEX_OF_CLOSEVALUE], 
+                ele[INDEX_OF_OPENVALUE],
+                ele[INDEX_OF_HIGHVALUE],
+                ele[INDEX_OF_CLOSEVALUE],
                 ele[INDEX_OF_LOWVALUE]
             ]
         }
