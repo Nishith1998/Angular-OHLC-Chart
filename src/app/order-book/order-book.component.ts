@@ -15,7 +15,6 @@ const INITIAL_TOTAL = 0;
   styleUrls: ['./order-book.component.scss']
 })
 export class OrderBookComponent implements OnInit, OnDestroy {
-   // move
   bidsMap: Map<number, [number, number, number, number]> = new Map();
   asksMap: Map<number, [number, number, number, number]> = new Map();
   minBid: number; maxBid: number; 
