@@ -24,6 +24,7 @@ const INDEX_OF_LOWVALUE = 4;
 
 export class TableDataType {
     symbol: string;
+    tickerName: string;
     lastPrice?: number;
     unit: string;
     // symbolValue: string; // remove
@@ -38,9 +39,9 @@ export class TableDataType {
             const unit = ele[INDEX_OF_SYMBOL].substring(4,).replace(':', '').replace('F0', '').replace('F0', '')
             if(tickersdataMap.has(key)) {
                 if(ele[INDEX_OF_SYMBOL].length > 4)
-                tickersdataMap.get(key).push({symbol: ele[INDEX_OF_SYMBOL], lastPrice: ele[INDEX_OF_LASTPRICE], unit: unit})
+                tickersdataMap.get(key).push({symbol: ele[INDEX_OF_SYMBOL], lastPrice: ele[INDEX_OF_LASTPRICE], unit: unit, tickerName: key})
             } else {
-                tickersdataMap.set(key, [{symbol: ele[INDEX_OF_SYMBOL], lastPrice: ele[INDEX_OF_LASTPRICE], unit: unit}])
+                tickersdataMap.set(key, [{symbol: ele[INDEX_OF_SYMBOL], lastPrice: ele[INDEX_OF_LASTPRICE], unit: unit, tickerName: key}])
             }
         });
         const tickerTableMergedArr: TableDataType[] = [];

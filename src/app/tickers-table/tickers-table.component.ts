@@ -46,4 +46,8 @@ export class TickersTableComponent implements OnInit {
     
   }
 
+  hideDuplicateKeys() {
+    
+  }
+
 }

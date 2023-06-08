@@ -18,7 +18,6 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import { TickersTableComponent } from './tickers-table/tickers-table.component';
 import { OrderBookComponent } from './order-book/order-book.component';
 import { LayoutComponent } from './layout/layout.component';
-import { TablePipe } from './tickers-table/table.pipe';
 import { LoadingComponent } from './loading/loading.component';
 import { LoadingInterceptor } from './services/loading-interceptor';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -41,7 +40,6 @@ class MyErrorHandler implements ErrorHandler {
     TickersTableComponent,
     OrderBookComponent,
     LayoutComponent,
-    TablePipe,
     LoadingComponent
   ],
   imports: [
