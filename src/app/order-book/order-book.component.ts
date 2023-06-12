@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ApiDataService } from '../services/api-data.service';
 import { INITIAL_PAYLOAD_FOR_ORDERBOOK, QUERY_PARAM_SYMBOL } from '../constants';
-import { OrderBookPayload, UpdatedValuesFromWs, isUpdatedValuesFromWs } from '../models';
+import { OrderBookPayload, UpdatedValuesFromWs } from '../models';
 import { ActivatedRoute, Params } from '@angular/router';
 import { WebsocketService } from '../services/websocket.service';
 import { first } from 'rxjs';
