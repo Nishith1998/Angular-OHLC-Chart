@@ -7,8 +7,6 @@ import { WebsocketService } from '../services/websocket.service';
 import { first } from 'rxjs';
 import { OrderBookService } from './order-book.service';
 
-const INITIAL_TOTAL = 0;
-
 @Component({
   selector: 'app-order-book',
   templateUrl: './order-book.component.html',
@@ -60,32 +58,8 @@ export class OrderBookComponent implements OnInit, OnDestroy {
 
   callOrderBookAPI(): void {
     this.apiDataService.getOrderBookData(this.bookPayload).subscribe((data: UpdatedValuesFromWs | UpdatedValuesFromWs[]) => {
-      this.updateBookMap(data);
+      this.orderBookService.updateBookMap.call(this, data);
     })
-  }
-
-  updateBookMap(updatedValue: UpdatedValuesFromWs | UpdatedValuesFromWs[]): void {
-    if (isUpdatedValuesFromWs(updatedValue)) {
-      const [price, count, amount] = [...updatedValue];
-      if (count != 0) {
-        if (amount < 0) {
-          this.asksMap.set(price, [count, Math.abs(amount), INITIAL_TOTAL, price]);
-        } else {
-          this.bidsMap.set(price, [count, Math.abs(amount), INITIAL_TOTAL, price]);
-        }
-      } else {
-        this.asksMap.delete(price);
-        this.bidsMap.delete(price);
-      }
-    } else if (updatedValue) { // do not type check
-      updatedValue.forEach(([price, count, amount]: [price: number, count: number, amount: number]) => {
-        if (amount < 0) {
-          this.asksMap.set(price, [count, Math.abs(amount), INITIAL_TOTAL, price]);
-        } else {
-          this.bidsMap.set(price, [count, amount, INITIAL_TOTAL, price])
-        }
-      });
-    }
   }
 
   ngOnDestroy() {

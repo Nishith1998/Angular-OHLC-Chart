@@ -10,4 +10,5 @@
 
 .chart-container {
   width: 800px !important;
+  @apply bg-gradient-to-r from-blue-100 to-pink-100;
 }

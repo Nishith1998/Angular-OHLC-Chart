@@ -3,6 +3,8 @@
     margin-top: 10px;
     max-height: 403px;
     overflow: auto;
+    @apply rounded-md #{!important};
+    @apply bg-gradient-to-r from-blue-50 to-pink-100
   }
 
   mat-row:hover {
@@ -25,9 +27,10 @@
 }
 
 .selected-symbol {
-  @apply bg-blue-400
+  @apply bg-gradient-to-r from-blue-400 to-blue-400;
 }
 
 .selected-symbol:hover {
-  @apply bg-blue-400 #{!important};
+  @apply bg-gradient-to-r from-blue-400 to-blue-400 #{!important};
+
 }
