@@ -17,5 +17,7 @@ Tickers are selectable for which the particular chart or order book will be load
 ## API info
 
 Tickers     - https://docs.bitfinex.com/reference/rest-public-tickers
+
 Chart       - https://docs.bitfinex.com/reference/rest-public-candles
+
 Order book  - https://docs.bitfinex.com/reference/ws-public-books
