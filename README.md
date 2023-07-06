@@ -8,11 +8,11 @@ Tickers are selectable for which the particular chart or order book will be load
 
 ## Home page
 
-![home-page](./images/home.png)
+![home-page](./home.PNG)
 
 ## OrderBook page
 
-![order-book](./images/orderBook.png)
+![order-book](./orderBook.PNG)
 
 ## API info
 
